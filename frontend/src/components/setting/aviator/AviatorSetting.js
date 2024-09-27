@@ -3,13 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IoIosArrowRoundBack } from "react-icons/io";
-import { FaAngleDown } from "react-icons/fa6";
 import $ from "jquery";
 import "jquery-validation";
 const AviatorSetting = () => {
   const navigate = useNavigate();
   const initialState = {
-    gameStatus: 0,
+    gameStatus: "",  
     minBetAmount: 0,
     maxBetAmount: 0,
     initialBonus: 0,
@@ -17,12 +16,13 @@ const AviatorSetting = () => {
     minWithdraw: 0,
     startGameRangeTimer: 0,
     endGameRangeTimer: 0,
-    gameStartTime: 0,
-    gameBetweenTime: 0,
+    gameStartTime: "", 
+    gameBetweenTime: "", 
     level1Commission: 0,
     level2Commission: 0,
     level3Commission: 0,
   };
+  
   const [data, setData] = useState(initialState);
   useEffect(() => {
     fetchOldData();
@@ -41,8 +41,8 @@ const AviatorSetting = () => {
         minWithdraw: response.result[0].minWithdraw,
         startGameRangeTimer: response.result[0].startGameRangeTimer,
         endGameRangeTimer: response.result[0].endGameRangeTimer,
-        gameStartTime: response.result[0].gameStartTime,
-        gameBetweenTime: response.result[0].gameBetweenTime,
+        gameStartTime: (response.result[0].gameStartTime).split("T")[0],
+        gameBetweenTime: (response.result[0].gameBetweenTime).split("T")[0],
         level1Commission: response.result[0].level1Commission,
         level2Commission: response.result[0].level2Commission,
         level3Commission: response.result[0].level3Commission,
@@ -289,7 +289,7 @@ const AviatorSetting = () => {
               Game Start Time
             </label>
             <input
-              type="text"
+              type="date"
               name="gameStartTime"
               id="gameStartTime"
               value={data.gameStartTime}
@@ -306,7 +306,7 @@ const AviatorSetting = () => {
               Game Between Time
             </label>
             <input
-              type="text"
+              type="date"
               name="gameBetweenTime"
               id="gameBetweenTime"
               value={data.gameBetweenTime}
