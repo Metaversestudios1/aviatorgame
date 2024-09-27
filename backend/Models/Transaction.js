@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const TransactionSchema = new mongoose.Schema(
   {
-    user_id: {
+    player_id: {
       type: String,
       unique: true,
     },

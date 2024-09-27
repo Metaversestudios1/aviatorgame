@@ -29,12 +29,14 @@ const UserRoute = require("./Routes/UserRoute");
 const BetRoutes = require("./Routes/BetRoutes");
 const SettingRoutes = require("./Routes/SettingRoutes");
 const BankRoutes = require("./Routes/BankRoutes");
+const PlayerRoutes = require("./Routes/PlayerRoutes");
 
 app.use('/api',UserRoute);
 app.use('/api', AdminRoute);
 app.use('/api', BetRoutes);
 app.use('/api',SettingRoutes);
 app.use('/api',BankRoutes);
+app.use('/api',PlayerRoutes);
 
 
 
