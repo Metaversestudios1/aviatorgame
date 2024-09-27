@@ -2,13 +2,13 @@ const express = require('express');
 const app = express();
 const cors = require("cors");
 const connectDB = require("./config/db");
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 
 connectDB(); 
 
 app.use(cors());
 const corsOption ={
-    origin: "http://localhost:3001",
+    origin: "http://localhost:3000",
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     preflightContinue: false,
     credentials: true,
@@ -20,9 +20,6 @@ app.options('*', cors(corsOption));
 app.use(cors(corsOption));
 app.use(express.json());
 
-app.get('/',(req,res) => {
-    res.send('Hello World !');
-})
 
 const AdminRoute = require("./Routes/AdminRoute");
 const UserRoute = require("./Routes/UserRoute");
@@ -37,6 +34,9 @@ app.use('/api',SettingRoutes);
 app.use('/api',BankRoutes);
 
 
+app.get('/',(req,res) => {
+    res.send('Hello World !');
+})
 
 app.listen(PORT,() =>{
     console.log(`server is running on http://localhost:${PORT}`);
