@@ -8,8 +8,8 @@ const settingSchema = new mongoose.Schema(
         initialBonus: { type: Number,  },
         minWithdraw: { type: Number,  },
         minRecharge: { type: Number,  },
-        startGameRangeTimer: { type: Date,  }, // Start time of the game range timer
-        endGameRangeTimer: { type: Date,  },   // End time of the game range timer
+        startGameRangeTimer: { type: Number,  }, // Start time of the game range timer
+        endGameRangeTimer: { type: Number,  },   // End time of the game range timer
         level1Commission: { type: Number,  },
         level2Commission: { type: Number,  },
         level3Commission: { type: Number,  },
