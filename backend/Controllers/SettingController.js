@@ -23,8 +23,18 @@ const updatesetting = async(req,res)=>{
         res.status(500).json({ success: false, message: "Error in updating the setting", error: err.message });
     }
   }
+  const insertsetting = async (req, res) => {    
+    try {
+        const newbet = new Setting({...req.body});
+        await newbet.save();
+        res.status(201).json({ success: true })
+    } catch (err) {
+      res.status(500).json({ success: false, message: "Error inserting setting", error: err.message });
+    }
+  };
 
 module.exports= {
     updatesetting,  
-    getsetting
+    getsetting,
+    insertsetting
 }

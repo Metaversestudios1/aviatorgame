@@ -10,15 +10,15 @@ const placeBet = async (req, res) => {
     // Check if player cashed out before crash
     let playerWon = cashoutMultiplier <= crashMultiplier;
     let winnings = 0;
-    console.log(playerWon);
+    // console.log(playerWon);
 
-    // if (playerWon) {
-    //     winnings = betAmount * cashoutMultiplier;
-    //     await Player.findByIdAndUpdate(playerId, { $inc: { balance: winnings } });
-    // } else {
-    //     // Player loses, deduct the bet
-    //     await Player.findByIdAndUpdate(playerId, { $inc: { balance: -betAmount } });
-    // }
+    if (playerWon) {
+        winnings = betAmount * cashoutMultiplier;
+      //  await Player.findByIdAndUpdate(playerId, { $inc: { balance: winnings } });
+    } else {
+        // Player loses, deduct the bet
+      //  await Player.findByIdAndUpdate(playerId, { $inc: { balance: -betAmount } });
+    }
 
     res.json({
         crashMultiplier,
@@ -36,5 +36,5 @@ function generateCrashMultiplier(lambda) {
 
 
 module.exports = {
-    placeBet
+    placeBet,
 }
