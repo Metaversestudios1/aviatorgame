@@ -41,8 +41,9 @@ const AviatorSetting = () => {
         minWithdraw: response.result[0].minWithdraw,
         startGameRangeTimer: response.result[0].startGameRangeTimer,
         endGameRangeTimer: response.result[0].endGameRangeTimer,
-        gameStartTime: (response.result[0].gameStartTime).split("T")[0],
-        gameBetweenTime: (response.result[0].gameBetweenTime).split("T")[0],
+        gameStartTime: response.result[0].gameStartTime?.split("T")[0] || '', // Check if gameStartTime exists
+        gameBetweenTime: response.result[0].gameBetweenTime?.split("T")[0] || '', // Check if gameBetweenTime exists
+      
         level1Commission: response.result[0].level1Commission,
         level2Commission: response.result[0].level2Commission,
         level3Commission: response.result[0].level3Commission,
@@ -87,7 +88,6 @@ const AviatorSetting = () => {
 
   const handleSubmit = async(e)=>{
     e.preventDefault()
-    console.log(data)
     if(!validateSettingForm()){
       return
     }
@@ -150,24 +150,27 @@ const AviatorSetting = () => {
               htmlFor="gameStatus"
               className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
             >
-              Game status
+           1. Game status
             </label>
-            <input
-              type="text"
-              name="gameStatus"
-              id="gameStatus"
-              value={data.gameStatus}
-              onChange={handleChange}
-              className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-black block w-full p-2.5 "
-              placeholder="Enter game status"
-            />
+
+            <select 
+             name="gameStatus"
+             id="gameStatus"
+             value={data.gameStatus}
+             onChange={handleChange}
+             className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-black block w-full p-2.5 "
+             
+             >
+              <option value="0">Inactive</option>
+              <option value="1">Active</option>
+             </select>
           </div>
           <div className="my-4 relative">
             <label
               htmlFor="minBetAmount"
               className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
             >
-              Min Bet Amount
+           2. Min Bet Amount
             </label>
             <input
               type="text"
@@ -184,7 +187,7 @@ const AviatorSetting = () => {
               htmlFor="maxBetAmount"
               className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
             >
-              Max Bet Amount
+             3. Max Bet Amount
             </label>
             <input
               type="text"
@@ -201,7 +204,7 @@ const AviatorSetting = () => {
               htmlFor="initialBonus"
               className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
             >
-              Initial Bonus
+              4.Initial Bonus
             </label>
             <input
               type="text"
@@ -218,7 +221,7 @@ const AviatorSetting = () => {
               htmlFor="minRecharge"
               className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
             >
-              Min Recharge
+             5. Min Recharge
             </label>
             <input
               type="text"
@@ -235,7 +238,7 @@ const AviatorSetting = () => {
               htmlFor="minWithdraw"
               className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
             >
-              Min Withdraw
+            6. Min Withdraw
             </label>
             <input
               type="text"
@@ -252,7 +255,7 @@ const AviatorSetting = () => {
               htmlFor="startGameRangeTimer"
               className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
             >
-              Start Game Range Timer
+             7. Start Game Range Timer
             </label>
             <input
               type="text"
@@ -269,7 +272,7 @@ const AviatorSetting = () => {
               htmlFor="endGameRangeTimer"
               className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
             >
-              End Game Range Timer
+             8. End Game Range Timer
             </label>
             <input
               type="text"
@@ -286,7 +289,7 @@ const AviatorSetting = () => {
               htmlFor="gameStartTime"
               className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
             >
-              Game Start Time
+             9. Game Start Time
             </label>
             <input
               type="date"
@@ -303,7 +306,7 @@ const AviatorSetting = () => {
               htmlFor="gameBetweenTime"
               className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
             >
-              Game Between Time
+             10. Game Between Time
             </label>
             <input
               type="date"
@@ -320,7 +323,7 @@ const AviatorSetting = () => {
               htmlFor="level1Commission"
               className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
             >
-              Level1 Commission
+             11. Level1 Commission
             </label>
             <input
               type="text"
@@ -337,7 +340,7 @@ const AviatorSetting = () => {
               htmlFor="level2Commission"
               className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
             >
-              Level2 Commission
+            12.  Level2 Commission
             </label>
             <input
               type="text"
@@ -354,7 +357,7 @@ const AviatorSetting = () => {
               htmlFor="level3Commission"
               className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
             >
-              Level3 Commission
+           13.   Level3 Commission
             </label>
             <input
               type="text"
@@ -371,7 +374,7 @@ const AviatorSetting = () => {
             className="text-white bg-[#0472ff] hover:bg-blue-800 font-medium rounded-lg px-5 py-2.5"
             onClick={handleSubmit}
           >
-            Save changes
+            Update Setting
           </button>
         </form>
       </div>
