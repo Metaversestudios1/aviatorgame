@@ -14,7 +14,7 @@ const settingSchema = new mongoose.Schema(
         level2Commission: { type: Number,  },
         level3Commission: { type: Number,  },
         gameStartTime: { type: Date,  },      // Time when the game starts
-        gameBetweenTime: { type: Date,  }, 
+        gameBetweenEndTime: { type: Date,  },
     },
     { timestamps: true, collection: "setting" }
 );

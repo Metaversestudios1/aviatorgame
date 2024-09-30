@@ -1,127 +1,72 @@
+module.exports = (io) => {
+  let users = {}; // Store user data and their bets
+  let multiplier = 0; // Starting multiplier
+  let crashPoint = 0; // Where the plane crashes
 
-const Symbol = require("../models/Symbols");
-const Pattern = require("../models/Pattern");
+  const startGame = () => {
+    console.log('Game started');
+    
+    // Generate random crash point (e.g., between 1.5x to 10x)
+    crashPoint = Math.random() * (10 - 1.5) + 1.5;
+    console.log(`Crash point set at: ${crashPoint.toFixed(2)}x`);
 
-async function spinSlot(betAmount) {
-  const symbols = await Symbol.find({ deleted_at: null }).exec();
+    multiplier = 0; // Reset multiplier
+    io.emit('multiplier_reset', { multiplier: 0 }); // Notify frontend to reset and show bet input
 
-  const weightedSymbols = [];
-  symbols.forEach((symbol) => {
-    const weightCount = Math.round(symbol.win_percentage * 100);
-    for (let i = 0; i < weightCount; i++) {
-      weightedSymbols.push(symbol.symbol_name);
-    }
+    setTimeout(() => {
+      io.emit('betting_open', { isBettingOpen: true }); // Open betting window for 5 seconds
+      console.log('Betting is now open.');
+
+      setTimeout(() => {
+        // Close betting and start increasing multiplier
+        io.emit('betting_close', { isBettingOpen: false });
+        console.log('Betting closed. Game is starting.');
+
+        let gameInterval = setInterval(() => {
+          multiplier += 0.1; // Increment multiplier
+          io.emit('multiplier_update', { multiplier: multiplier.toFixed(2) });
+
+          // If multiplier exceeds crash point, the plane crashes
+          if (multiplier >= crashPoint) {
+            clearInterval(gameInterval);
+            io.emit('plane_crash', { crashPoint: crashPoint.toFixed(2) });
+
+            // After crash, reset game after 5 seconds
+            setTimeout(startGame, 5000);
+          }
+        }, 100); // Every 100ms, increase multiplier by 0.1x
+      }, 5000); // 5 seconds for placing bets
+    }, 0);
+  };
+
+  io.on('connection', (socket) => {
+    console.log('User connected:', socket.id);
+
+    users[socket.id] = { betAmount: 0, hasCashedOut: false };
+
+    socket.on('place_bet', (betAmount) => {
+      if (multiplier === 0) { // Only allow bets before the multiplier starts
+        users[socket.id].betAmount = betAmount;
+        users[socket.id].hasCashedOut = false;
+        console.log(`User ${socket.id} placed a bet of $${betAmount}`);
+      }
+    });
+
+    socket.on('cash_out', () => {
+      if (multiplier > 0 && !users[socket.id].hasCashedOut) {
+        const winnings = users[socket.id].betAmount * multiplier;
+        io.to(socket.id).emit('cash_out_success', { winnings: winnings.toFixed(2) });
+        users[socket.id].hasCashedOut = true;
+        console.log(`User ${socket.id} cashed out with $${winnings.toFixed(2)} at ${multiplier.toFixed(2)}x`);
+      }
+    });
+
+    socket.on('disconnect', () => {
+      console.log('User disconnected:', socket.id);
+      delete users[socket.id];
+    });
   });
 
-  // Create a 3x3 matrix with randomly selected symbols
-  const matrix = [];
-  for (let row = 0; row < 3; row++) {
-    matrix[row] = [];
-    for (let col = 0; col < 3; col++) {
-      matrix[row][col] =
-        weightedSymbols[Math.floor(Math.random() * weightedSymbols.length)];
-    }
-  }
-  console.log(matrix);
-
-  return matrix; // Return the 3x3 matrix of symbols
-}
-
-function calculatePayout(betAmount, winAmount) {
-  if (!winAmount) return 0;
-  return betAmount * winAmount;
-}
-
-const checkMatrixAgainstPatterns = async (matrix) => {
-  const patterns = await Pattern.find({ deleted_at: null }).exec(); // Fetch all patterns from the DB
-  let totalWinAmount = 0;
-
-  for (const pattern of patterns) {
-    let currentPatternWinAmount = 0; // Track win amount for the current pattern
-
-    // Check all symbol IDs in the pattern
-    for (const symbolId of pattern.symbol) {
-      const symbolDoc = await Symbol.findById(symbolId); // Fetch the actual symbol from the symbol ID
-      const actualSymbol = symbolDoc.symbol_name; // Get the actual symbol, e.g., "🍊"
-
-      const patternCoordinates = pattern.coordinates.get(symbolId); // Use `.get()` to access the value in Map
-
-      // Ensure that patternCoordinates is an array and exists
-      if (!Array.isArray(patternCoordinates)) {
-        console.error(
-          `Pattern coordinates not found or not an array for symbol ID: ${symbolId}`
-        );
-        continue; // Skip this pattern if coordinates are invalid
-      }
-
-      // Check if the matrix matches the pattern using actual symbols
-      let match = true;
-      for (const [row, col] of patternCoordinates) {
-        if (matrix[row - 1][col - 1] !== actualSymbol) {
-          match = false;
-          break;
-        }
-      }
-
-      // If the symbol matches its coordinates, accumulate win amount
-      if (match) {
-        currentPatternWinAmount += pattern.win_amount;
-      }
-    }
-
-    // Add current pattern's win amount to total if any matches are found
-    totalWinAmount += currentPatternWinAmount;
-  }
-
-  if (totalWinAmount > 0) {
-    return { isWin: true, totalWinAmount }; // Return total win amount if there are any matches
-  }
-
-  return { isWin: false }; // No matching pattern, return lose
-};
-
-const checkWinOrLose = async (req, res) => {
-  const { betAmount } = req.body;
-
-  try {
-    const matrix = await spinSlot(betAmount); // Generate the 3x3 matrix
-    const { isWin, totalWinAmount } = await checkMatrixAgainstPatterns(matrix); // Check if matrix matches any pattern
-
-    let payout = 0;
-    let result = "lose";
-
-    if (isWin) {
-      result = "win";
-      payout = calculatePayout(betAmount, totalWinAmount); // Calculate payout based on total win amount
-    }
-
-    // Save game result to the database
-    const game = new Game({
-      betAmount,
-      payout,
-      result,
-      symbols: matrix.flat(), // Store the flat matrix as the symbols
-    });
-
-    await game.save();
-
-    return res.json({
-      success: true,
-      result,
-      payout,
-      symbols: matrix, // Return the full 2D matrix
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: error.message });
-  }
-};
-
-const gameInfo = async (req, res) => {
-  res.status(200).json({ message: "this is game route" });
-};
-
-module.exports = {
-  gameInfo,
-  checkWinOrLose,
+  // Start the game when the server is ready
+  startGame();
 };

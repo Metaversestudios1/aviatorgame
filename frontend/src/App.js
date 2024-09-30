@@ -8,6 +8,7 @@ import AviatorSetting from "./components/setting/aviator/AviatorSetting"
 import Login from "./components/Login"
 import Error from "./components/Error"
 import AviatorGame from "./components/AviatorGame"
+import AviatorNew from "./components/AviatorNew"
 function App() {
   const [sideBar, setSideBar] = useState(true);
   const toggleSideBar = () => {
@@ -55,6 +56,18 @@ function App() {
           <div className="flex flex-col flex-grow overflow-y-auto flex-[3]">
             <Navbar toggleSideBar={toggleSideBar} />
             <AviatorGame/>
+          </div>
+        </div>
+      ),
+    },
+    {
+      path: "/aviatornew",
+      element: (
+        <div className="flex h-screen">
+          <Sidebar sidebar={sideBar} className="flex-1" toggleSideBar={toggleSideBar}/>
+          <div className="flex flex-col flex-grow overflow-y-auto flex-[3]">
+            <Navbar toggleSideBar={toggleSideBar} />
+            <AviatorNew/>
           </div>
         </div>
       ),

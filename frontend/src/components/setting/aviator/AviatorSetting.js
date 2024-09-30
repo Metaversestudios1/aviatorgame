@@ -18,7 +18,7 @@ const AviatorSetting = () => {
     startGameRangeTimer: 0,
     endGameRangeTimer: 0,
     gameStartTime: "",
-    gameBetweenTime: "",
+    gameBetweenEndTime: "",
     level1Commission: 0,
     level2Commission: 0,
     level3Commission: 0,
@@ -42,14 +42,8 @@ const AviatorSetting = () => {
         minWithdraw: response.result[0].minWithdraw,
         startGameRangeTimer: response.result[0].startGameRangeTimer,
         endGameRangeTimer: response.result[0].endGameRangeTimer,
-<<<<<<< HEAD
         gameStartTime: response.result[0].gameStartTime.split("T")[0],
-        gameBetweenTime: response.result[0].gameBetweenTime.split("T")[0],
-=======
-        gameStartTime: response.result[0].gameStartTime?.split("T")[0] || '', // Check if gameStartTime exists
-        gameBetweenTime: response.result[0].gameBetweenTime?.split("T")[0] || '', // Check if gameBetweenTime exists
-      
->>>>>>> 68a956fc2dc1ef1d2874ffc1369a442105e3bf63
+        gameBetweenEndTime: response.result[0].gameBetweenEndTime,
         level1Commission: response.result[0].level1Commission,
         level2Commission: response.result[0].level2Commission,
         level3Commission: response.result[0].level3Commission,
@@ -69,7 +63,7 @@ const AviatorSetting = () => {
         startGameRangeTimer: { required: true },
         endGameRangeTimer: { required: true },
         gameStartTime: { required: true },
-        gameBetweenTime: { required: true },
+        gameBetweenEndTime: { required: true },
         level1Commission: { required: true },
         level2Commission: { required: true },
         level3Commission: { required: true },
@@ -84,7 +78,7 @@ const AviatorSetting = () => {
         startGameRangeTimer: { required: "Please enter start game range time" },
         endGameRangeTimer: { required: "Please enter end game range time" },
         gameStartTime: { required: "Please enter game start time" },
-        gameBetweenTime: { required: "Please enter game between time" },
+        gameBetweenEndTime: { required: "Please enter game between time" },
         level1Commission: { required: "Please enter level 1 commission" },
         level2Commission: { required: "Please enter level 2 commision" },
         level3Commission: { required: "Please enter level 3 commision" },
@@ -93,18 +87,10 @@ const AviatorSetting = () => {
     return $("#settingform").valid();
   };
 
-<<<<<<< HEAD
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(data);
     if (!validateSettingForm()) {
       return;
-=======
-  const handleSubmit = async(e)=>{
-    e.preventDefault()
-    if(!validateSettingForm()){
-      return
->>>>>>> 68a956fc2dc1ef1d2874ffc1369a442105e3bf63
     }
     try {
       const res = await fetch(`http://localhost:8000/api/updatesetting`, {
@@ -157,7 +143,6 @@ const AviatorSetting = () => {
         />
         <div className="text-2xl font-bold mx-2 my-8 px-2">Aviator setting</div>
       </div>
-<<<<<<< HEAD
       {loader ? (
         <div className="absolute w-[100%] h-[40%] flex justify-center items-center">
           <div
@@ -327,16 +312,16 @@ const AviatorSetting = () => {
             </div>
             <div className="my-4 relative">
               <label
-                htmlFor="gameBetweenTime"
+                htmlFor="gameBetweenEndTime"
                 className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
               >
                 Game Between Time
               </label>
               <input
                 type="date"
-                name="gameBetweenTime"
-                id="gameBetweenTime"
-                value={data.gameBetweenTime}
+                name="gameBetweenEndTime"
+                id="gameBetweenEndTime"
+                value={data.gameBetweenEndTime}
                 onChange={handleChange}
                 className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-black block w-full p-2.5 "
                 placeholder="Enter Game Between Time"
@@ -403,7 +388,6 @@ const AviatorSetting = () => {
           </form>
         </div>
       )}
-=======
       <div className="flex flex-col items-center w-[70%] m-auto">
         <form id="settingform" className="w-[60%]">
           <div className="my-4 relative">
@@ -411,27 +395,26 @@ const AviatorSetting = () => {
               htmlFor="gameStatus"
               className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
             >
-           1. Game status
+              1. Game status
             </label>
 
-            <select 
-             name="gameStatus"
-             id="gameStatus"
-             value={data.gameStatus}
-             onChange={handleChange}
-             className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-black block w-full p-2.5 "
-             
-             >
+            <select
+              name="gameStatus"
+              id="gameStatus"
+              value={data.gameStatus}
+              onChange={handleChange}
+              className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-black block w-full p-2.5 "
+            >
               <option value="0">Inactive</option>
               <option value="1">Active</option>
-             </select>
+            </select>
           </div>
           <div className="my-4 relative">
             <label
               htmlFor="minBetAmount"
               className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
             >
-           2. Min Bet Amount
+              2. Min Bet Amount
             </label>
             <input
               type="text"
@@ -448,7 +431,7 @@ const AviatorSetting = () => {
               htmlFor="maxBetAmount"
               className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
             >
-             3. Max Bet Amount
+              3. Max Bet Amount
             </label>
             <input
               type="text"
@@ -482,7 +465,7 @@ const AviatorSetting = () => {
               htmlFor="minRecharge"
               className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
             >
-             5. Min Recharge
+              5. Min Recharge
             </label>
             <input
               type="text"
@@ -499,7 +482,7 @@ const AviatorSetting = () => {
               htmlFor="minWithdraw"
               className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
             >
-            6. Min Withdraw
+              6. Min Withdraw
             </label>
             <input
               type="text"
@@ -516,7 +499,7 @@ const AviatorSetting = () => {
               htmlFor="startGameRangeTimer"
               className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
             >
-             7. Start Game Range Timer
+              7. Start Game Range Timer
             </label>
             <input
               type="text"
@@ -533,7 +516,7 @@ const AviatorSetting = () => {
               htmlFor="endGameRangeTimer"
               className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
             >
-             8. End Game Range Timer
+              8. End Game Range Timer
             </label>
             <input
               type="text"
@@ -550,7 +533,7 @@ const AviatorSetting = () => {
               htmlFor="gameStartTime"
               className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
             >
-             9. Game Start Time
+              9. Game Start Time
             </label>
             <input
               type="date"
@@ -564,27 +547,10 @@ const AviatorSetting = () => {
           </div>
           <div className="my-4 relative">
             <label
-              htmlFor="gameBetweenTime"
-              className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
-            >
-             10. Game Between Time
-            </label>
-            <input
-              type="date"
-              name="gameBetweenTime"
-              id="gameBetweenTime"
-              value={data.gameBetweenTime}
-              onChange={handleChange}
-              className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-black block w-full p-2.5 "
-              placeholder="Enter Game Between Time"
-            />
-          </div>
-          <div className="my-4 relative">
-            <label
               htmlFor="level1Commission"
               className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
             >
-             11. Level1 Commission
+              11. Level1 Commission
             </label>
             <input
               type="text"
@@ -601,7 +567,7 @@ const AviatorSetting = () => {
               htmlFor="level2Commission"
               className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
             >
-            12.  Level2 Commission
+              12. Level2 Commission
             </label>
             <input
               type="text"
@@ -618,7 +584,7 @@ const AviatorSetting = () => {
               htmlFor="level3Commission"
               className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
             >
-           13.   Level3 Commission
+              13. Level3 Commission
             </label>
             <input
               type="text"
@@ -639,7 +605,6 @@ const AviatorSetting = () => {
           </button>
         </form>
       </div>
->>>>>>> 68a956fc2dc1ef1d2874ffc1369a442105e3bf63
     </div>
   );
 };
