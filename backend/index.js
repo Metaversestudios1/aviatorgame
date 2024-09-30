@@ -5,7 +5,7 @@ const socketIO = require("socket.io"); // Import socket.io
 const cors = require("cors");
 const connectDB = require("./config/db");
 const PORT = process.env.PORT || 8000;
-const gameController = require("./controllers/gameController"); // Import game logic
+const gameController = require("./Controllers/GameController"); // Import game logic
 
 // Connect to the database
 connectDB();
