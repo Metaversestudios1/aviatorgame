@@ -32,7 +32,7 @@ module.exports = (io) => {
             io.emit('plane_crash', { crashPoint: crashPoint.toFixed(2) });
 
             // After crash, reset game after 5 seconds
-            setTimeout(startGame, 5000);
+            startGame()
           }
         }, 100); // Every 100ms, increase multiplier by 0.1x
       }, 5000); // 5 seconds for placing bets

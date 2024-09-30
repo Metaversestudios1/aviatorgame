@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
+import React, { useState, useEffect } from "react";
+import io from "socket.io-client";
 
-const socket = io('http://localhost:8000');
+const socket = io("http://localhost:8000");
 
 function AviatorGame() {
   const [betAmount, setBetAmount] = useState(0);
@@ -13,7 +13,7 @@ function AviatorGame() {
 
   useEffect(() => {
     // Listen for game start and multiplier reset
-    socket.on('multiplier_reset', () => {
+    socket.on("multiplier_reset", () => {
       setMultiplier(0);
       setIsCrashed(false);
       setIsBetPlaced(false);
@@ -22,52 +22,52 @@ function AviatorGame() {
     });
 
     // Listen for betting window open
-    socket.on('betting_open', () => {
+    socket.on("betting_open", () => {
       setIsBettingOpen(true); // Open betting window
     });
 
     // Listen for betting window close
-    socket.on('betting_close', () => {
+    socket.on("betting_close", () => {
       setIsBettingOpen(false); // Close betting window
     });
 
     // Listen for multiplier updates
-    socket.on('multiplier_update', (data) => {
-        console.log(data.multiplier)
+    socket.on("multiplier_update", (data) => {
+      console.log(data.multiplier);
       setMultiplier(data.multiplier);
     });
 
     // Listen for crash event
-    socket.on('plane_crash', (data) => {
+    socket.on("plane_crash", (data) => {
       setIsCrashed(true);
     });
 
     // Listen for cash out success
-    socket.on('cash_out_success', (data) => {
+    socket.on("cash_out_success", (data) => {
       setWinnings(data.winnings);
     });
 
     // Clean up on component unmount
     return () => {
-      socket.off('multiplier_reset');
-      socket.off('betting_open');
-      socket.off('betting_close');
-      socket.off('multiplier_update');
-      socket.off('plane_crash');
-      socket.off('cash_out_success');
+      socket.off("multiplier_reset");
+      socket.off("betting_open");
+      socket.off("betting_close");
+      socket.off("multiplier_update");
+      socket.off("plane_crash");
+      socket.off("cash_out_success");
     };
   }, []);
 
   const handlePlaceBet = () => {
     if (betAmount > 0 && isBettingOpen) {
-      socket.emit('place_bet', betAmount);
+      socket.emit("place_bet", betAmount);
       setIsBetPlaced(true);
     }
   };
 
   const handleCashOut = () => {
     if (multiplier > 0 && !isCrashed) {
-      socket.emit('cash_out');
+      socket.emit("cash_out");
     }
   };
 
@@ -89,7 +89,9 @@ function AviatorGame() {
           {!isBetPlaced ? (
             <button onClick={handlePlaceBet}>Place Bet</button>
           ) : (
-            <button onClick={handleCashOut} disabled={isCrashed}>Cash Out</button>
+            <button onClick={handleCashOut} disabled={isCrashed}>
+              Cash Out
+            </button>
           )}
         </div>
       )}
