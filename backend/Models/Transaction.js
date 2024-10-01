@@ -1,29 +1,36 @@
-const mongoose = require("mongoose");
+const mongoose= require('mongoose');
 
-const TransactionSchema = new mongoose.Schema(
-  {
-    player_id: {
-      type: String,
-      unique: true,
+const transactionSchema = new mongoose.Schema({
+    user_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
     },
-    transaction_type: { type: String, required: true },
+    paymentType: {
+        type: String,
+        enum: ['manual', 'razorpay'], // Payment types
+    },
+    transactionType: {
+        type: String,
+        enum: ['recharge', 'withdraw'], // Transaction types
+    },
     amount: {
-      type: Number,
+        type: Number,
     },
-    transaction_status: {
-      type: String,
-      unique:true
+    status: {
+        type: String,
+        enum: ['pending', 'approved', 'rejected', 'completed'],
+        default: 'pending',
     },
-    game_id:{
-      type:String,
+    transactionId: {
+        type: String, // For Razorpay or manual reference
+    },
+    razorpayPaymentId: {
+        type: String, // Only for Razorpay payments
     },
     deleted_at: {
       type: Date,
       default: null,
     },
-  },
-  { timestamps: true, collection: "transaction" }
-);
+},{ timestamps: true, collection: "payment" });
 
-module.exports = mongoose.model("Transaction", TransactionSchema);
-
+module.exports = mongoose.model('Payment', paymentSchema);
