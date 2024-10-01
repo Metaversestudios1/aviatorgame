@@ -1,5 +1,4 @@
 const mongoose= require('mongoose');
-
 const transactionSchema = new mongoose.Schema({
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -31,6 +30,6 @@ const transactionSchema = new mongoose.Schema({
       type: Date,
       default: null,
     },
-},{ timestamps: true, collection: "payment" });
+},{ timestamps: true, collection: "transaction" });
 
-module.exports = mongoose.model('Payment', paymentSchema);
+module.exports = mongoose.model('Transaction',  transactionSchema )

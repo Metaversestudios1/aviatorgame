@@ -1,11 +1,11 @@
-const Payment = require('../Models/Payment');
-const razorpay = require('razorpay');
+const Transaction = require('../Models/Transaction');
+// const razorpay = require('razorpay');
 const { options } = require('../Routes/PlayerRoutes');
 
-const razorpay =new razorpay({
-    Key_id:process.env.RAZORPAY_KEY_ID,
-    key_secret: process.env.RAZORPAY_KEY_SECRET,
-})
+// const razorpay =new razorpay({
+//     Key_id:process.env.RAZORPAY_KEY_ID,
+//     key_secret: process.env.RAZORPAY_KEY_SECRET,
+// })
 
 const createmanualpayment = async(req,res) =>{
     const { playerId ,amount , transactionId, transactionType } = req.body;
@@ -42,73 +42,74 @@ const updatemanualpayment= async(req,res)=>{
     }
 }
 
-const createRazorpayPayment = async (req, res) => {
-    const { playerId, amount } = req.body;
+// const createRazorpayPayment = async (req, res) => {
+//     const { playerId, amount } = req.body;
 
-    try {
-        const options = {
-            amount: amount * 100, // Amount in paise
-            currency: 'INR',
-            receipt: `receipt_${Math.random().toString(36).substring(2)}`,
-        };
+//     try {
+//         const options = {
+//             amount: amount * 100, // Amount in paise
+//             currency: 'INR',
+//             receipt: `receipt_${Math.random().toString(36).substring(2)}`,
+//         };
 
-        const razorpayOrder = await razorpay.orders.create(options);
+//         const razorpayOrder = await razorpay.orders.create(options);
 
-        const payment = new Payment({
-            playerId,
-            paymentType: 'razorpay',
-            amount,
-            transactionId: razorpayOrder.id,
-            status: 'pending',
-        });
+//         const payment = new Payment({
+//             playerId,
+//             paymentType: 'razorpay',
+//             amount,
+//             transactionId: razorpayOrder.id,
+//             status: 'pending',
+//         });
 
-        await payment.save();
+//         await payment.save();
 
-        res.json({
-            success: true,
-            orderId: razorpayOrder.id,
-            amount: razorpayOrder.amount,
-            currency: razorpayOrder.currency,
-        });
-    } catch (err) {
-        res.status(500).json({ success: false, message: 'Error creating Razorpay payment', err });
-    }
-};
+//         res.json({
+//             success: true,
+//             orderId: razorpayOrder.id,
+//             amount: razorpayOrder.amount,
+//             currency: razorpayOrder.currency,
+//         });
+//     } catch (err) {
+//         res.status(500).json({ success: false, message: 'Error creating Razorpay payment', err });
+//     }
+// };
 
 
-const verifyRazorpayPayment = async (req, res) => {
-    const { razorpayPaymentId, razorpayOrderId, razorpaySignature, paymentId } = req.body;
+// const verifyRazorpayPayment = async (req, res) => {
+//     const { razorpayPaymentId, razorpayOrderId, razorpaySignature, paymentId } = req.body;
 
-    try {
-        // Validate Razorpay payment signature
-        const crypto = require('crypto');
-        const generatedSignature = crypto
-            .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
-            .update(razorpayOrderId + '|' + razorpayPaymentId)
-            .digest('hex');
+//     try {
+//         // Validate Razorpay payment signature
+//         const crypto = require('crypto');
+//         const generatedSignature = crypto
+//             .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+//             .update(razorpayOrderId + '|' + razorpayPaymentId)
+//             .digest('hex');
 
-        if (generatedSignature !== razorpaySignature) {
-            return res.status(400).json({ success: false, message: 'Invalid signature' });
-        }
+//         if (generatedSignature !== razorpaySignature) {
+//             return res.status(400).json({ success: false, message: 'Invalid signature' });
+//         }
 
-        const payment = await Payment.findById(paymentId);
+//         const payment = await Payment.findById(paymentId);
 
-        if (!payment || payment.paymentType !== 'razorpay') {
-            return res.status(404).json({ success: false, message: 'Razorpay payment not found' });
-        }
+//         if (!payment || payment.paymentType !== 'razorpay') {
+//             return res.status(404).json({ success: false, message: 'Razorpay payment not found' });
+//         }
 
-        payment.status = 'completed';
-        payment.razorpayPaymentId = razorpayPaymentId;
-        await payment.save();
+//         payment.status = 'completed';
+//         payment.razorpayPaymentId = razorpayPaymentId;
+//         await payment.save();
 
-        res.json({ success: true, payment });
-    } catch (err) {
-        res.status(500).json({ success: false, message: 'Error verifying payment', err });
-    }
-};
+//         res.json({ success: true, payment });
+//     } catch (err) {
+//         res.status(500).json({ success: false, message: 'Error verifying payment', err });
+//     }
+// };
 
 
 const getpayment = async (req,res) => {
+    console.log(req.body);
     try{
         const pageSize = parseInt(req.query.limit);
         const page = parseInt(req.query.page);
@@ -130,15 +131,15 @@ const getpayment = async (req,res) => {
         if (transactionType) {
             query.transactionType = transactionType; // e.g., 'recharge' or 'withdraw'
         }
-        const result = await Bet.find(query)
+        const result = await Transaction.find(query)
             .sort({ createdAt: -1 })
             .skip((page - 1) * pageSize)
             .limit(pageSize);
-        const count = await Bet.find(query).countDocuments();
+        const count = await Transaction.find(query).countDocuments();
         res.status(200).json({ success: true, result, count });
 
     }catch(error){
-        res.status(500).json({success:false,message:"error inserting bet"});
+        res.status(500).json({success:false,message:"error fetching transaction",error :error.message});
      }
 }
 
@@ -146,7 +147,7 @@ const getpayment = async (req,res) => {
 module.exports = {
     createmanualpayment,
     updatemanualpayment,
-    createRazorpayPayment,
-    verifyRazorpayPayment,
+    // createRazorpayPayment,
+    // verifyRazorpayPayment,
     getpayment,
 }

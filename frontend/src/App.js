@@ -3,11 +3,18 @@ import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import { useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import PrivateRoute from "./components/utils/PrivateRoute";
 import Home from  "./components/Home";
 import AviatorSetting from "./components/setting/aviator/AviatorSetting"
 import Login from "./components/Login"
 import Error from "./components/Error"
 import AviatorNew from "./components/AviatorNew"
+import AuthProvider from "./context/AuthContext";
+import BankDetails from "./components/setting/BankDetails/bankdetail"
+import RechargeHistory from "./components/setting/rechargehistory"
+import WithdrawHistory from "./components/setting/withdrawhistory"
+
+
 function App() {
   const [sideBar, setSideBar] = useState(true);
   const toggleSideBar = () => {
@@ -15,16 +22,26 @@ function App() {
   };
   const router = createBrowserRouter([
     {
+      path: "/",
+      element: (
+        <div>
+          <Login />
+        </div>
+      ),
+    },
+    
+    {
       path: "/login",
       element: (
         <div>
-            <Login/>
+          <Login />
         </div>
       ),
     },
     {
-      path: "/",
+      path: "/dashboard",
       element: (
+        <PrivateRoute>
         <div className="flex h-screen">
           <Sidebar sidebar={sideBar} className="flex-1" toggleSideBar={toggleSideBar}/>
           <div className="flex flex-col flex-grow overflow-y-auto flex-[3]">
@@ -32,11 +49,13 @@ function App() {
             <Home/>
           </div>
         </div>
+        </PrivateRoute>
       ),
     },
     {
       path: "/aviatorsetting",
       element: (
+        <PrivateRoute>
         <div className="flex h-screen">
           <Sidebar sidebar={sideBar} className="flex-1" toggleSideBar={toggleSideBar}/>
           <div className="flex flex-col flex-grow overflow-y-auto flex-[3]">
@@ -44,6 +63,7 @@ function App() {
             <AviatorSetting/>
           </div>
         </div>
+        </PrivateRoute>
       ),
     },
     
@@ -51,6 +71,7 @@ function App() {
     {
       path: "/aviatornew",
       element: (
+        <PrivateRoute>
         <div className="flex h-screen">
           <Sidebar sidebar={sideBar} className="flex-1" toggleSideBar={toggleSideBar}/>
           <div className="flex flex-col flex-grow overflow-y-auto flex-[3]">
@@ -58,8 +79,53 @@ function App() {
             <AviatorNew/>
           </div>
         </div>
+        </PrivateRoute>
       ),
     },
+    {
+      path: "/bankdetails",
+      element: (
+        <PrivateRoute>
+        <div className="flex h-screen">
+          <Sidebar sidebar={sideBar} className="flex-1" toggleSideBar={toggleSideBar}/>
+          <div className="flex flex-col flex-grow overflow-y-auto flex-[3]">
+            <Navbar toggleSideBar={toggleSideBar} />
+            <BankDetails/>
+          </div>
+        </div>
+        </PrivateRoute>
+      ),
+    },
+
+    {
+      path: "/rechargehistory",
+      element: (
+        <PrivateRoute>
+        <div className="flex h-screen">
+          <Sidebar sidebar={sideBar} className="flex-1" toggleSideBar={toggleSideBar}/>
+          <div className="flex flex-col flex-grow overflow-y-auto flex-[3]">
+            <Navbar toggleSideBar={toggleSideBar} />
+            <RechargeHistory/>
+          </div>
+        </div>
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: "/withdrawhistory",
+      element: (
+        <PrivateRoute>
+        <div className="flex h-screen">
+          <Sidebar sidebar={sideBar} className="flex-1" toggleSideBar={toggleSideBar}/>
+          <div className="flex flex-col flex-grow overflow-y-auto flex-[3]">
+            <Navbar toggleSideBar={toggleSideBar} />
+            <WithdrawHistory/>
+          </div>
+        </div>
+        </PrivateRoute>
+      ),
+    },
+    
     
     {
       path: "*",
@@ -69,6 +135,10 @@ function App() {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 }
 export default App;

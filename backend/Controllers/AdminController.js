@@ -4,20 +4,18 @@ const Admin = require('../models/Admin');
 const jwt = require("jsonwebtoken");
 require('dotenv').config();
 
-
-
-
 const insertadmin = async (req, res) => {
 
-    const { username, password } = req.body;
+    const { password, ...data } = req.body;
     try {
         const salt = await bcrypt.genSalt(10);
         const hashedpassword = await bcrypt.hash(password, salt);
 
         const newadmin = new Admin(
             {
+                ...data,
                 password: hashedpassword,
-                username: username
+               
             }
         );
 
@@ -28,15 +26,15 @@ const insertadmin = async (req, res) => {
     }
 }
 const login = async (req, res) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
     try {
 
-        if (!username || !password) {
+        if (!email || !password) {
             return res.status(404).json({ sucess: false, message: "please provide all fields" });
         }
-        const admin = await Admin.findOne({ username });
+        const admin = await Admin.findOne({ email });
         if (!admin) {
-            return res.status(404).json({ sucess: false, message: "Admin not found" });
+            return res.status(404).json({ sucess: false, message: "Email not found" });
         }
         const match = await bcrypt.compare(password, admin.password);
         if (!match) {

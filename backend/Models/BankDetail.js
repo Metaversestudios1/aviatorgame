@@ -4,11 +4,11 @@ const bankSchma = new mongoose.Schema(
   {
     bankName: { type: String },
     accountNo: { type: String },
-    accountholderhame: { type: String },
+    accountholdername: { type: String },
     ifscCode: { type: String },
     mobileNo: { type: String },
     upiId: { type: String },
-    barCode:{
+    QrCode:{
         publicId: { type: String },
         url: { type: String },
         originalname: { type: String },

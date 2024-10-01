@@ -1,15 +1,13 @@
 const mongoose =require('mongoose')
 
 const AdminSchema = new mongoose.Schema({
-    username:{
+    email:{
         type:String,
-        required:true,
     },
     password:{
         type:String
     },
-    contact: { type: String, required: true },
-
+    contact: { type: String },
     status:{
         type:Number,
         default:1,

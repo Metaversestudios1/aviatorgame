@@ -55,18 +55,18 @@ const AviatorSetting = () => {
     $("#settingform").validate({
       rules: {
         gameStatus: { required: true },
-        minBetAmount: { required: true },
-        maxBetAmount: { required: true },
-        initialBonus: { required: true },
-        minRecharge: { required: true },
-        minWithdraw: { required: true },
-        startGameRangeTimer: { required: true },
-        endGameRangeTimer: { required: true },
-        gameStartTime: { required: true },
-        gameBetweenEndTime: { required: true },
-        level1Commission: { required: true },
-        level2Commission: { required: true },
-        level3Commission: { required: true },
+        // minBetAmount: { required: true },
+        // maxBetAmount: { required: true },
+        // initialBonus: { required: true },
+        // minRecharge: { required: true },
+        // minWithdraw: { required: true },
+        // startGameRangeTimer: { required: true },
+        // endGameRangeTimer: { required: true },
+        // gameStartTime: { required: true },
+        // gameBetweenEndTime: { required: true },
+        // level1Commission: { required: true },
+        // level2Commission: { required: true },
+        // level3Commission: { required: true },
       },
       messages: {
         gameStatus: { required: "Please enter game status" },
@@ -164,15 +164,18 @@ const AviatorSetting = () => {
               >
                 Game status
               </label>
-              <input
-                type="text"
-                name="gameStatus"
-                id="gameStatus"
-                value={data.gameStatus}
-                onChange={handleChange}
-                className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-black block w-full p-2.5 "
-                placeholder="Enter game status"
-              />
+              <select
+               type="text"
+               name="gameStatus"
+               id="gameStatus"
+               value={data.gameStatus}
+               onChange={handleChange}
+               className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-black block w-full p-2.5 "
+               placeholder="Enter game status"
+              >
+                <option value="0">Inactive</option>
+                <option value="1">Active</option>
+              </select>
             </div>
             <div className="my-4 relative">
               <label
@@ -388,223 +391,7 @@ const AviatorSetting = () => {
           </form>
         </div>
       )}
-      <div className="flex flex-col items-center w-[70%] m-auto">
-        <form id="settingform" className="w-[60%]">
-          <div className="my-4 relative">
-            <label
-              htmlFor="gameStatus"
-              className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
-            >
-              1. Game status
-            </label>
-
-            <select
-              name="gameStatus"
-              id="gameStatus"
-              value={data.gameStatus}
-              onChange={handleChange}
-              className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-black block w-full p-2.5 "
-            >
-              <option value="0">Inactive</option>
-              <option value="1">Active</option>
-            </select>
-          </div>
-          <div className="my-4 relative">
-            <label
-              htmlFor="minBetAmount"
-              className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
-            >
-              2. Min Bet Amount
-            </label>
-            <input
-              type="text"
-              name="minBetAmount"
-              id="minBetAmount"
-              value={data.minBetAmount}
-              onChange={handleChange}
-              className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-black block w-full p-2.5 "
-              placeholder="Enter Min Bet Amount"
-            />
-          </div>
-          <div className="my-4 relative">
-            <label
-              htmlFor="maxBetAmount"
-              className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
-            >
-              3. Max Bet Amount
-            </label>
-            <input
-              type="text"
-              name="maxBetAmount"
-              id="maxBetAmount"
-              value={data.maxBetAmount}
-              onChange={handleChange}
-              className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-black block w-full p-2.5 "
-              placeholder="Enter Max Bet Amount"
-            />
-          </div>
-          <div className="my-4 relative">
-            <label
-              htmlFor="initialBonus"
-              className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
-            >
-              4.Initial Bonus
-            </label>
-            <input
-              type="text"
-              name="initialBonus"
-              id="initialBonus"
-              value={data.initialBonus}
-              onChange={handleChange}
-              className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-black block w-full p-2.5 "
-              placeholder="Enter Initial Bonus"
-            />
-          </div>
-          <div className="my-4 relative">
-            <label
-              htmlFor="minRecharge"
-              className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
-            >
-              5. Min Recharge
-            </label>
-            <input
-              type="text"
-              name="minRecharge"
-              id="minRecharge"
-              value={data.minRecharge}
-              onChange={handleChange}
-              className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-black block w-full p-2.5 "
-              placeholder="Enter Min Recharge"
-            />
-          </div>
-          <div className="my-4 relative">
-            <label
-              htmlFor="minWithdraw"
-              className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
-            >
-              6. Min Withdraw
-            </label>
-            <input
-              type="text"
-              name="minWithdraw"
-              id="minWithdraw"
-              value={data.minWithdraw}
-              onChange={handleChange}
-              className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-black block w-full p-2.5 "
-              placeholder="Enter Min Withdraw"
-            />
-          </div>
-          <div className="my-4 relative">
-            <label
-              htmlFor="startGameRangeTimer"
-              className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
-            >
-              7. Start Game Range Timer
-            </label>
-            <input
-              type="text"
-              name="startGameRangeTimer"
-              id="startGameRangeTimer"
-              value={data.startGameRangeTimer}
-              onChange={handleChange}
-              className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-black block w-full p-2.5 "
-              placeholder="Enter Start Game Range Timer"
-            />
-          </div>
-          <div className="my-4 relative">
-            <label
-              htmlFor="endGameRangeTimer"
-              className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
-            >
-              8. End Game Range Timer
-            </label>
-            <input
-              type="text"
-              name="endGameRangeTimer"
-              id="endGameRangeTimer"
-              value={data.endGameRangeTimer}
-              onChange={handleChange}
-              className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-black block w-full p-2.5 "
-              placeholder="Enter End Game Range Timer"
-            />
-          </div>
-          <div className="my-4 relative">
-            <label
-              htmlFor="gameStartTime"
-              className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
-            >
-              9. Game Start Time
-            </label>
-            <input
-              type="date"
-              name="gameStartTime"
-              id="gameStartTime"
-              value={data.gameStartTime}
-              onChange={handleChange}
-              className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-black block w-full p-2.5 "
-              placeholder="Enter Game Start Time"
-            />
-          </div>
-          <div className="my-4 relative">
-            <label
-              htmlFor="level1Commission"
-              className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
-            >
-              11. Level1 Commission
-            </label>
-            <input
-              type="text"
-              name="level1Commission"
-              id="level1Commission"
-              value={data.level1Commission}
-              onChange={handleChange}
-              className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-black block w-full p-2.5 "
-              placeholder="Enter Level1 Commision"
-            />
-          </div>
-          <div className="my-4 relative">
-            <label
-              htmlFor="level2Commission"
-              className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
-            >
-              12. Level2 Commission
-            </label>
-            <input
-              type="text"
-              name="level2Commission"
-              id="level2Commission"
-              value={data.level2Commission}
-              onChange={handleChange}
-              className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-black block w-full p-2.5 "
-              placeholder="Enter Level2 Commision"
-            />
-          </div>
-          <div className="my-4 relative">
-            <label
-              htmlFor="level3Commission"
-              className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
-            >
-              13. Level3 Commission
-            </label>
-            <input
-              type="text"
-              name="level3Commission"
-              id="level3Commission"
-              value={data.level3Commission}
-              onChange={handleChange}
-              className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-black block w-full p-2.5 "
-              placeholder="Enter Level3 Commision"
-            />
-          </div>
-          <button
-            type="submit"
-            className="text-white bg-[#0472ff] hover:bg-blue-800 font-medium rounded-lg px-5 py-2.5"
-            onClick={handleSubmit}
-          >
-            Update Setting
-          </button>
-        </form>
-      </div>
+     
     </div>
   );
 };
