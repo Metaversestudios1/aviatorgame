@@ -14,6 +14,10 @@ const bankSchma = new mongoose.Schema(
         originalname: { type: String },
         mimetype: { type: String },
     },
+    deleted_at: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,
