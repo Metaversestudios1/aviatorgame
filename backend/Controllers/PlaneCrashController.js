@@ -1,4 +1,4 @@
-const PlaneCrash = require('../models/PlaneCrash');
+const PlaneCrash = require('../Models/PlaneCrash');
 const bcrypt = require('bcrypt');
 const insertplanecrash = async (req, res) => {    
     try {
@@ -14,7 +14,7 @@ const insertplanecrash = async (req, res) => {
     const updatedata = req.body;
     const id = updatedata.id;
     try{
-         const result = await Bet.updateOne(
+         const result = await PlaneCrash.updateOne(
             {_id:id},
             { $set :updatedata.oldData
             }
@@ -69,16 +69,16 @@ const getSingleplanecrash = async(req, res) => {
     }
 }
 
-const deletebet = async(req, res) => {
+const deleteplanecrash= async(req, res) => {
     try{
         const { id } = req.body;
-        const result = await Bet.findByIdAndUpdate(
+        const result = await PlaneCrash.findByIdAndUpdate(
             id,
             { deleted_at:new Date()},
             { new: true}
         );
         if (!result) {
-            return res.status(404).json({  success: false,message: "bet not found" });
+            return res.status(404).json({  success: false,message: "Plane Crash record not found" });
           }
           res.status(200).json({
             success: true,
@@ -86,14 +86,14 @@ const deletebet = async(req, res) => {
           });
         
     } catch (error) {
-        res.status(500).json({ success: false, message: "error fetching bet" });
+        res.status(500).json({ success: false, message: "error fetching plane percentage" });
     }
 }  
 module.exports= {
-    insertbet,
-    updatebet,
-    getAllbet,
-    getSinglebet,
-    deletebet,
+    insertplanecrash,
+    updateplanecrash,
+    getAllplanecrash,
+    getSingleplanecrash,
+    deleteplanecrash,
   
 }

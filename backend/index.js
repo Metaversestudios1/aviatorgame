@@ -32,7 +32,7 @@ const io = socketIO(server, {
   },
 });
 // Pass io instance to gameController
-gameController(io); // Call your game controller and pass the io instance
+//gameController(io); // Call your game controller and pass the io instance
 
 // Define routes
 const AdminRoute = require("./Routes/AdminRoute");
@@ -42,6 +42,7 @@ const SettingRoutes = require("./Routes/SettingRoutes");
 const BankRoutes = require("./Routes/BankRoutes");
 const PlayerRoutes = require("./Routes/PlayerRoutes");
 const PaymentRoutes = require("./Routes/PaymentRoutes");
+const PlaneCrashRoutes = require("./Routes/PlaneCrashRoutes");
 
 app.use("/api", UserRoute);
 app.use("/api", AdminRoute);
@@ -50,6 +51,7 @@ app.use("/api", SettingRoutes);
 app.use("/api", BankRoutes);
 app.use("/api", PlayerRoutes);
 app.use("/api", PaymentRoutes);
+app.use("/api", PlaneCrashRoutes);
 
 // Root route
 app.get("/", (req, res) => {
