@@ -2,7 +2,8 @@ const PlaneCrash = require('../Models/PlaneCrash');
 const bcrypt = require('bcrypt');
 const insertplanecrash = async (req, res) => {    
     try {
-        const newbet = new PlaneCrash({...req.body});
+        console.log(req.body)
+        const newbet = new PlaneCrash(req.body);
         await newbet.save();
         res.status(201).json({ success: true })
     } catch (err) {

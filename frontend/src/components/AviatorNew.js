@@ -18,7 +18,6 @@ function AviatorGame() {
   const [cashOutMultiplier, setCashOutMultiplier] = useState("");
   const [crashPoint, setCrashPoint] = useState("");
 
-
   const gameRef = useRef(null);
 
   useEffect(() => {
@@ -53,6 +52,12 @@ function AviatorGame() {
 
     socket.on("multiplier_update", (data) => {
       setMultiplier(data.multiplier);
+
+      // Ensure the plane becomes visible when multiplier updates
+      if (!isCrashed && !isPlaneVisible) {
+        setIsPlaneVisible(true);
+        movePlaneDiagonally(); // Move the plane if it's not crashed
+      }
     });
 
     socket.on("plane_crash", ({ crashPoint }) => {
@@ -76,7 +81,7 @@ function AviatorGame() {
       socket.off("plane_crash");
       socket.off("cash_out_success");
     };
-  }, []);
+  }, [isPlaneVisible, isCrashed]);
 
   const resetPlanePosition = () => {
     setTimeout(() => {
@@ -197,19 +202,19 @@ function AviatorGame() {
             </div>
           ) : (
             <>
-            <div className="absolute  top-[15%] left-2/4 -translate-x-2/4 -translate-y-2/4 z-50 ">
-            <div className="text-3xl font-bold">{message}</div>
-            <div className="text-3xl text-[#de3232] font-bold">{crashPoint}</div>
-              
-            </div>
-          
+              <div className="absolute top-[15%] left-2/4 -translate-x-2/4 -translate-y-2/4 z-50 ">
+                <div className="text-3xl font-bold">{message}</div>
+                <div className="text-3xl text-[#de3232] font-bold">{crashPoint}</div>
+              </div>
             </>
           )}
-          {showLoader && <img
-            src="/loading.png"
-            alt="loading"
-            className={`${showLoader ? "loading" : "hidden"}`}
-          />}
+          {showLoader && (
+            <img
+              src="/loading.png"
+              alt="loading"
+              className={`${showLoader ? "loading" : "hidden"}`}
+            />
+          )}
           <p
             className={`${
               showLoader ? "mt-36 text-[#d20637] text-lg" : "hidden"
@@ -230,7 +235,7 @@ function AviatorGame() {
           <p className="text-lg text-white ml-5">
             {winnings
               ? `Your Winnings: ${winnings} at ${cashOutMultiplier}`
-              : `Your Winnings: 0 `}
+              : `Your Winnings: $0`}
           </p>
         </div>
       </div>
@@ -239,5 +244,3 @@ function AviatorGame() {
 }
 
 export default AviatorGame;
-
-
