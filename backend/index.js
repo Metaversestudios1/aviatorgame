@@ -26,13 +26,13 @@ app.use(cors(corsOptions));
 app.use(express.json());
 const io = socketIO(server, {
     cors: {
-      origin: "http://localhost:3000", // Frontend URL
+      origin: "https://aviatorgame-frontend.vercel.app", // Frontend URL
       methods: ["GET", "POST"],
       credentials: true, // Allow credentials
     },
   });
 // Pass io instance to gameController
- gameController(io); // Call your game controller and pass the io instance
+ //gameController(io); // Call your game controller and pass the io instance
 
 // Define routes
 const AdminRoute = require("./Routes/AdminRoute");
