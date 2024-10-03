@@ -1,8 +1,0 @@
-Aviator@100
-
-
-
-mongodb+srv://aviatorgame:Aviator@100@cluster0.0be04.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-
-
-mongodb+srv://aviatorgame:Aviator@100@cluster0.0be04.mongodb.net/

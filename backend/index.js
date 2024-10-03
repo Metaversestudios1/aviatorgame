@@ -32,7 +32,7 @@ const io = socketIO(server, {
   },
 });
 // Pass io instance to gameController
-//gameController(io); // Call your game controller and pass the io instance
+gameController(io); // Call your game controller and pass the io instance
 
 // Define routes
 const AdminRoute = require("./Routes/AdminRoute");
