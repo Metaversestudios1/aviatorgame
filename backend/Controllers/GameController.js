@@ -7,10 +7,11 @@ module.exports = (io) => {
     console.log('Game started');
     
     // Generate random crash point (e.g., between 1.5x to 10x)
-    crashPoint = Math.random() * (10 - 1.5) + 1.5;
+    crashPoint = Math.random() * (4 - 1) + 1;
+
     console.log(`Crash point set at: ${crashPoint.toFixed(2)}x`);
 
-    multiplier = 0; // Reset multiplier
+    multiplier = 1; // Reset multiplier
     io.emit('multiplier_reset', { multiplier: 0 }); // Notify frontend to reset and show bet input
 
     setTimeout(() => {
@@ -23,7 +24,8 @@ module.exports = (io) => {
         console.log('Betting closed. Game is starting.');
 
         let gameInterval = setInterval(() => {
-          multiplier += 0.1; // Increment multiplier
+          multiplier += 0.01; // Increment multiplier
+          console.log(multiplier);
           io.emit('multiplier_update', { multiplier: multiplier.toFixed(2) });
 
           // If multiplier exceeds crash point, the plane crashes
@@ -32,9 +34,9 @@ module.exports = (io) => {
             io.emit('plane_crash', { crashPoint: crashPoint.toFixed(2) });
 
             // After crash, reset game after 5 seconds
-            startGame()
+            startGame();
           }
-        }, 100); // Every 100ms, increase multiplier by 0.1x
+        }, 70); // Every 100ms, increase multiplier by 0.01x
       }, 5000); // 5 seconds for placing bets
     }, 0);
   };
@@ -45,7 +47,7 @@ module.exports = (io) => {
     users[socket.id] = { betAmount: 0, hasCashedOut: false };
 
     socket.on('place_bet', (betAmount) => {
-      if (multiplier === 0) { // Only allow bets before the multiplier starts
+      if (multiplier === 1) { // Only allow bets before the multiplier starts
         users[socket.id].betAmount = betAmount;
         users[socket.id].hasCashedOut = false;
         console.log(`User ${socket.id} placed a bet of $${betAmount}`);
@@ -53,9 +55,10 @@ module.exports = (io) => {
     });
 
     socket.on('cash_out', () => {
+
       if (multiplier > 0 && !users[socket.id].hasCashedOut) {
         const winnings = users[socket.id].betAmount * multiplier;
-        io.to(socket.id).emit('cash_out_success', { winnings: winnings.toFixed(2) });
+        io.to(socket.id).emit('cash_out_success', { winnings: winnings.toFixed(2) , message:`${multiplier.toFixed(2)}x`});
         users[socket.id].hasCashedOut = true;
         console.log(`User ${socket.id} cashed out with $${winnings.toFixed(2)} at ${multiplier.toFixed(2)}x`);
       }

@@ -72,13 +72,8 @@ function App() {
       path: "/aviatornew",
       element: (
         <PrivateRoute>
-        <div className="flex h-screen">
-          <Sidebar sidebar={sideBar} className="flex-1" toggleSideBar={toggleSideBar}/>
-          <div className="flex flex-col flex-grow overflow-y-auto flex-[3]">
-            <Navbar toggleSideBar={toggleSideBar} />
+       
             <AviatorNew/>
-          </div>
-        </div>
         </PrivateRoute>
       ),
     },
