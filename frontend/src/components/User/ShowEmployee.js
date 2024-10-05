@@ -53,7 +53,7 @@ const ShowEmployee = () => {
   const fetchEmployeeDetails = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/api/getesingleemployee`,
+        `${process.env.REACT_APP_BACKEND_URL}//api/getesingleemployee`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -120,21 +120,21 @@ const ShowEmployee = () => {
         fetchDataAndUpdateState(
           role,
           "role",
-          `${process.env.REACT_APP_BACKEND_URL}/api/getSingleRole `,
+          `${process.env.REACT_APP_BACKEND_URL}//api/getSingleRole `,
           "role"
         );
       if (department)
         fetchDataAndUpdateState(
           department,
           "department",
-          `${process.env.REACT_APP_BACKEND_URL}/api/getSingleDepartment`,
+          `${process.env.REACT_APP_BACKEND_URL}//api/getSingleDepartment`,
           "department_name"
         );
       if (teamLead)
         fetchDataAndUpdateState(
           teamLead,
           "team_lead",
-          `${process.env.REACT_APP_BACKEND_URL}/api/getesingleemployee`,
+          `${process.env.REACT_APP_BACKEND_URL}//api/getesingleemployee`,
           "name"
         );
 
@@ -144,7 +144,7 @@ const ShowEmployee = () => {
           projects.map((id) =>
             fetchDataAndGetValue(
               id,
-              `${process.env.REACT_APP_BACKEND_URL}/api/getSingleproject`,
+              `${process.env.REACT_APP_BACKEND_URL}//api/getSingleproject`,
               "name"
             )
           )

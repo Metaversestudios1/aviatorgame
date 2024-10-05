@@ -20,7 +20,7 @@ const User = () => {
   }, [page, search]);
 
   const fetchRoleName = async (id) => {
-    const roleRes = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/getSingleRole`, {
+    const roleRes = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/getSingleRole`, {
       method: "POST",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({ id }),
@@ -33,7 +33,7 @@ const User = () => {
   const fetchData = async () => {
     setLoader(true);
     const res = await fetch(
-      `${process.env.REACT_APP_BACKEND_URL}api/getAlluser?page=${page}&limit=${pageSize}&search=${search}`
+      `${process.env.REACT_APP_BACKEND_URL}/api/getAlluser?page=${page}&limit=${pageSize}&search=${search}`
     );
     const response = await res.json();
     if (response.success) {
@@ -66,7 +66,7 @@ const User = () => {
       if (count === 1) {
         userOne = false;
       }
-      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/deleteemployee`, {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/deleteemployee`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
@@ -113,7 +113,7 @@ const User = () => {
       if (count === 1) {
         userOne = false;
       }
-      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/deleteEmployeePhoto`, {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/deleteEmployeePhoto`, {
         method: "post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),

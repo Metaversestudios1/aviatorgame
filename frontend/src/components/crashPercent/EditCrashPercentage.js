@@ -23,7 +23,7 @@ const EditWinPercentage = () => {
     fetchOldData();
   }, []);
   const fetchOldData = async () => {
-    const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/getSingleplanecrash`, {
+    const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/getSingleplanecrash`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id }),
@@ -94,7 +94,7 @@ const EditWinPercentage = () => {
     try {
       setLoader(true);
       const updatedata = {oldData, id}
-      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/updateplanecrash`, {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/updateplanecrash`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedata),

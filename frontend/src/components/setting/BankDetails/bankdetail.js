@@ -26,7 +26,7 @@ const BankDetails = () => {
     fetchOldData();
   }, []);
   const fetchOldData = async () => {
-    const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/getbankdetails`);
+    const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/getbankdetails`);
     const response = await res.json();
     if (response.success) {
       setData({
@@ -86,7 +86,7 @@ const BankDetails = () => {
     });
     console.log(data);
     try {
-      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/updatebankdetails`, {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/updatebankdetails`, {
         method: "PUT",
         //headers: { "Content-Type": "application/json" },
         body:formData,

@@ -90,7 +90,7 @@ const AddEmployee = () => {
   }, []);
   const fetchProjects = async () => {
     const res = await fetch(
-      `${process.env.REACT_APP_BACKEND_URL}/api/getproject`
+      `${process.env.REACT_APP_BACKEND_URL}//api/getproject`
     );
     const response = await res.json();
     if (response.success) {
@@ -98,21 +98,21 @@ const AddEmployee = () => {
     }
   };
   const fetchEmployees = async () => {
-    const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/getemployee`);
+    const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}//api/getemployee`);
     const response = await res.json();
     if (response.success) {
       setEmployees(response.result);
     }
   };
   const fetchDepartments = async () => {
-    const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/getalldepartment`);
+    const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}//api/getalldepartment`);
     const response = await res.json();
     if (response.success) {
       setDepartments(response.result);
     }
   };
   const fetchRoles = async () => {
-    const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/getrole`);
+    const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}//api/getrole`);
     const response = await res.json();
     if (response.success) {
       setRoles(response.result);
@@ -280,7 +280,7 @@ Object.keys(data).forEach((key) => {
 });
 console.log(formData)
   
-      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/insertemployee`, {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}//api/insertemployee`, {
         method: "POST",
         body: formData,
       });

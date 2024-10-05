@@ -26,7 +26,7 @@ const CrashPercentage = () => {
     try {
       setLoader(true);
       const res = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}api/getAllplanecrash?page=${page}&limit=${pageSize}&search=${search}&transactionType=withdraw`
+        `${process.env.REACT_APP_BACKEND_URL}/api/getAllplanecrash?page=${page}&limit=${pageSize}&search=${search}&transactionType=withdraw`
       );
       const response = await res.json();
       console.log(response)
@@ -62,7 +62,7 @@ const CrashPercentage = () => {
       }
       try {
         const res = await fetch(
-          `${process.env.REACT_APP_BACKEND_URL}/api/updatestatus/Project/${id}`,
+          `${process.env.REACT_APP_BACKEND_URL}//api/updatestatus/Project/${id}`,
           {
             method: "POST",
             headers: {
@@ -99,7 +99,7 @@ const CrashPercentage = () => {
       if (count === 1) {
         winsOne = false;
       }
-      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/deleteplanecrash`, {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/deleteplanecrash`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),

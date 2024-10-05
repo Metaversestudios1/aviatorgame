@@ -23,7 +23,7 @@ const Payment = () => {
   }, [page, search]);
 
     const fetchuserName = async (id) => {
-        const userRes = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/getSingleuser`, {
+        const userRes = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/getSingleuser`, {
             method: "POST",
             headers: { "Content-type": "application/json" },
             body: JSON.stringify({ id }),
@@ -39,7 +39,7 @@ const Payment = () => {
     try {
       setLoader(true);
       const res = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}api/getpayment?page=${page}&limit=${pageSize}&search=${search}&transactionType=withdraw`
+        `${process.env.REACT_APP_BACKEND_URL}/api/getpayment?page=${page}&limit=${pageSize}&search=${search}&transactionType=withdraw`
       );
       const response = await res.json();
       if (response.success) {
@@ -88,7 +88,7 @@ const Payment = () => {
       }
       try {
         const res = await fetch(
-          `${process.env.REACT_APP_BACKEND_URL}api/updatetransaction/${id}`,
+          `${process.env.REACT_APP_BACKEND_URL}/api/updatetransaction/${id}`,
           {
             method: "POST",
             headers: {
