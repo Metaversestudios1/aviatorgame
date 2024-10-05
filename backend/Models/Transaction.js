@@ -17,7 +17,7 @@ const transactionSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['pending', 'approved', 'rejected', 'completed'],
+        enum: ['pending', 'approved', 'rejected'],
         default: 'pending',
     },
     transactionId: {
@@ -25,6 +25,10 @@ const transactionSchema = new mongoose.Schema({
     },
     razorpayPaymentId: {
         type: String, // Only for Razorpay payments
+    },
+    requested_date:{
+        type: Date, 
+        default: Date.now 
     },
     deleted_at: {
       type: Date,

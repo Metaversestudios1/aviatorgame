@@ -24,6 +24,7 @@ const AddCrashPercentage = () => {
       rules: {
         firstValue: {
           required: true,
+          
         },
         secondValue: {
           required: true,
@@ -146,12 +147,17 @@ const AddCrashPercentage = () => {
         </div>
       ) : (
         <div className="flex w-[90%] m-auto my-5">
-          <div className="flex-1 flex flex-col">
-            <div className="">rule 1</div>
-            <div className="">rule 1</div>
-            <div className="">rule 1</div>
-            <div className="">rule 1</div>
-            <div className="">rule 1</div>
+          <div className="flex-1 flex flex-col p-4">
+            <div className=""><span><b>Rule 1</b></span> -If Plane crash value set between 1 to 2 means it will crash  between 1.0 to 1.99</div><br></br>
+          
+            {/* <div className=""><span><b>Rule 1</b></span>- Plane crash value set between 1 to 5 means it will crash  between 1.0 to 4.99</div>
+            <div className=""><span><b>Rule 1</b></span> - Plane crash value set between 1 to 7 means it will crash  between 1.0 to 6.99</div>
+            <div className=""><span><b>Rule 1</b></span> - Plane crash value set between 1 to 10 means it will crash  between 1.0 to 9.99</div>
+            <div className=""><span><b>Rule 1</b></span> - Plane crash value set between 1 to 100 means it will crash  between 1.0 to 99.99</div>
+            <div className=""><span><b>Rule 1</b></span> - Plane crash value set between 1 to 1000 means it will crash  between 1.0 to 999.99</div> */}
+            <div className=""><span><b>Rule 2</b></span> - Crash Percentage Decide How Many percentage the range of random Values will generate</div>
+           
+            
           </div>
           <form id="winsForm" className="flex-1">
             <div className="my-2">
@@ -164,7 +170,7 @@ const AddCrashPercentage = () => {
               <input
                 name="firstValue"
                 value={data.firstValue}
-                type="text"
+                type="number"
                 id="firstValue"
                 className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-black block w-full p-2.5 "
                 placeholder="Please enter first value"
@@ -183,7 +189,7 @@ const AddCrashPercentage = () => {
                 name="secondValue"
                 value={data.secondValue}
                 onChange={handleChange}
-                type="text"
+                type="number"
                 id="secondValue"
                 className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-black block w-full p-2.5 "
                 placeholder="Please enter second value"
@@ -201,7 +207,7 @@ const AddCrashPercentage = () => {
                 name="crashPercentage"
                 value={data.crashPercentage}
                 onChange={handleChange}
-                type="text"
+                type="number"
                 id="crashPercentage"
                 className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-black block w-full p-2.5 "
                 placeholder="Please enter crash percentage"

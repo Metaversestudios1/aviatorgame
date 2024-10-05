@@ -41,7 +41,7 @@ const Sidebar = ({ sidebar, toggleSideBar }) => {
             <ul className="space-y-1.5">
               <li className=" hover:scale-105 transition-transform duration-200 " onClick={toggleSideBar}>
                 <NavLink
-                  to="/"
+                  to="/dashboard"
                   className={({ isActive }) =>
                     isActive
                       ? "flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-white bg-[#0472ff] rounded-lg"
@@ -118,7 +118,7 @@ const Sidebar = ({ sidebar, toggleSideBar }) => {
                     <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
                     <polyline points="9 22 9 12 15 12 15 22" />
                   </svg>
-                  withdraw History
+                  Withdraw History
                 </NavLink>
               </li>
 
@@ -175,7 +175,7 @@ const Sidebar = ({ sidebar, toggleSideBar }) => {
                       <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
                       <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                     </svg>
-                    Admin
+                    User
                   </div>
                   {openSubMenu.admin ? (
                     <FaAngleDown className="text-end" />
@@ -202,24 +202,6 @@ const Sidebar = ({ sidebar, toggleSideBar }) => {
                         }
                       >
                         Users List
-                      </NavLink>
-                    </div>
-                  </li>
-                  <li
-                    id="users-accordion"
-                    className="hs-accordion-content w-full my-2 overflow-hidden transition-all duration-200 hover:scale-110"
-                    onClick={toggleSideBar}
-                  >
-                    <div className="hs-accordion" id="users-accordion-sub-1">
-                      <NavLink
-                        to="/users/adduser"
-                        className={({ isActive }) =>
-                          isActive
-                            ? "flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-white bg-[#0472ff] rounded-lg ml-10 "
-                            : "flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-white rounded-lg ml-10  hover:text-black hover:bg-white"
-                        }
-                      >
-                        Add User
                       </NavLink>
                     </div>
                   </li>

@@ -14,6 +14,12 @@ import BankDetails from "./components/setting/BankDetails/bankdetail"
 import RechargeHistory from "./components/setting/rechargehistory"
 import WithdrawHistory from "./components/setting/withdrawhistory"
 
+import AddCrashPercentage from "./components/crashPercent/AddCrashPercentage"
+import CrashPercentage from "./components/crashPercent/CrashPercentage"
+import EditCrashPercentage from "./components/crashPercent/EditCrashPercentage"
+import User from "./components/User/User"
+
+
 
 function App() {
   const [sideBar, setSideBar] = useState(true);
@@ -121,7 +127,62 @@ function App() {
       ),
     },
     
-    
+    {
+      path: "/addcrashpercentage",
+      element: (
+        <PrivateRoute>
+        <div className="flex h-screen">
+          <Sidebar sidebar={sideBar} className="flex-1" toggleSideBar={toggleSideBar}/>
+          <div className="flex flex-col flex-grow overflow-y-auto flex-[3]">
+            <Navbar toggleSideBar={toggleSideBar} />
+            <AddCrashPercentage/>
+          </div>
+        </div>
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: "/crashpercentage",
+      element: (
+        <PrivateRoute>
+        <div className="flex h-screen">
+          <Sidebar sidebar={sideBar} className="flex-1" toggleSideBar={toggleSideBar}/>
+          <div className="flex flex-col flex-grow overflow-y-auto flex-[3]">
+            <Navbar toggleSideBar={toggleSideBar} />
+            <CrashPercentage/>
+          </div>
+        </div>
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: "/editcrashpercentage/:id",
+      element: (
+        <PrivateRoute>
+        <div className="flex h-screen">
+          <Sidebar sidebar={sideBar} className="flex-1" toggleSideBar={toggleSideBar}/>
+          <div className="flex flex-col flex-grow overflow-y-auto flex-[3]">
+            <Navbar toggleSideBar={toggleSideBar} />
+            <EditCrashPercentage/>
+          </div>
+        </div>
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: "/users",
+      element: (
+        <PrivateRoute>
+        <div className="flex h-screen">
+          <Sidebar sidebar={sideBar} className="flex-1" toggleSideBar={toggleSideBar}/>
+          <div className="flex flex-col flex-grow overflow-y-auto flex-[3]">
+            <Navbar toggleSideBar={toggleSideBar} />
+            <User/>
+          </div>
+        </div>
+        </PrivateRoute>
+      ),
+    },
     {
       path: "*",
       element: (

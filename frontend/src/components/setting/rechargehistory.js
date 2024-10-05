@@ -16,43 +16,46 @@ const Payment = () => {
   const [noData, setNoData] = useState(false);
   const [count, setCount] = useState(0);
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState("");
+ 
 
   useEffect(() => {
     fetchPayment();
-  }, [page, search, filter]);
+  }, [page, search]);
 
   const fetchuserName = async (id) => {
     const userRes = await fetch(`http://localhost:8000/api/getSingleuser`, {
-        method: "POST",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify({ id }),
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify({ id }),
     });
     const userData = await userRes.json();
 
-    const type = userData.success ? userData.result.username : "Unknown";
+    const type = userData.success ? userData.result : "Unknown";
 
     return type;
-};
+  };
 
   const fetchPayment = async () => {
     try {
       setLoader(true);
       const res = await fetch(
-        `http://localhost:8000/api/getpayment?page=${page}&limit=${pageSize}&search=${search}&filter=${filter}&transactionType=recharge`
+        `http://localhost:8000/api/getpayment?page=${page}&limit=${pageSize}&search=${search}&transactionType=recharge`
       );
       const response = await res.json();
       if (response.success) {
         const paymentWithuser = await Promise.all(
-            response.result.map(async (users) => {
-              const username = await fetchuserName(users.user_id);
-              return {
-                ...users,
-                username,
-              };
-            })
-          );
-          setPayment(paymentWithuser);
+          response.result.map(async (users) => {
+            const user = await fetchuserName(users.user_id);
+            const username = user.username;
+            const user_id = user.u_id;
+            return {
+              ...users,
+              username,
+              user_id,
+            };
+          })
+        );
+        setPayment(paymentWithuser);
         setNoData(response.result.length === 0);
         // setPayment(response.result);
         setCount(response.count);
@@ -69,16 +72,12 @@ const Payment = () => {
     if (name === "search") {
       setSearch(value);
       setPage(1);
-    } else if (name === "filter") {
-      setFilter(value);
-      setPage(1);
-    }
+    } 
   };
 
   const handleStatusChange = async (id, newStatus) => {
-    let status = newStatus === 1 ? "Inactive" : "Activate";
     const permissionOfDelete = window.confirm(
-      `Are you sure you want to ${status} the Project?`
+      `Are you sure you want to ${newStatus} the Transaction?`
     );
     if (permissionOfDelete) {
       let projectOne = payment.length === 1;
@@ -87,18 +86,18 @@ const Payment = () => {
       }
       try {
         const res = await fetch(
-          `${process.env.REACT_APP_BACKEND_URL}/api/updatestatus/Project/${id}`,
+          `http://localhost:8000/api/updatetransaction/${id}`,
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ status: newStatus }),
+            body: JSON.stringify({ status: newStatus,type:'recharge' }),
           }
         );
         const response = await res.json();
         if (response.success) {
-          toast.success(`Project is ${status} Successfully!`, {
+          toast.success(`Transaction is ${newStatus} Successfully!`, {
             position: "top-right",
             autoClose: 1000,
           });
@@ -132,14 +131,9 @@ const Payment = () => {
         theme="light"
       />
       <div className="flex items-center">
-        <div className="text-2xl font-bold mx-2 my-8 px-4">Payment</div>
+        <div className="text-2xl font-bold mx-2 my-8 px-4">Recharge History</div>
       </div>
       <div className="flex justify-between">
-        <NavLink to="/payment/addproject">
-          <button className="bg-blue-800 text-white p-3 m-5 text-sm rounded-lg">
-            Add New
-          </button>
-        </NavLink>
         <input
           placeholder="Search "
           type="text"
@@ -148,18 +142,7 @@ const Payment = () => {
           onChange={handleChange}
           className="text-black border-[1px] rounded-lg bg-white p-2 m-5"
         />
-        <select
-          name="filter"
-          value={filter}
-          onChange={handleChange}
-          className="text-black border-[1px] rounded-lg bg-white p-2 m-5"
-        >
-          <option value="">Select Filter</option>
-          <option value="recent">Recent</option>
-          <option value="oldest">Oldest</option>
-          <option value="running">Running</option>
-          <option value="closed">Closed</option>
-        </select>
+       
       </div>
 
       {loader && (
@@ -181,9 +164,12 @@ const Payment = () => {
             <thead className="text-xs uppercase bg-gray-200">
               <tr>
                 <th className="px-6 py-3 border-2">Sr no.</th>
-                <th className="px-6 py-3 border-2">User Name</th>                
+                <th className="px-6 py-3 border-2">Name</th>
+                <th className="px-6 py-3 border-2">User Id</th>
                 <th className="px-6 py-3 border-2">Payment Type</th>
                 <th className="px-6 py-3 border-2">Amount</th>
+                {/* <th className="px-6 py-3 border-2">Created At</th> */}
+                <th className="px-6 py-3 border-2">Request Date</th>
                 <th className="px-6 py-3 border-2">status</th>
                 <th className="px-6 py-3 border-2">Action</th>
               </tr>
@@ -195,38 +181,59 @@ const Payment = () => {
                     {startIndex + index + 1}
                   </th>
                   <td className="px-6 py-4 font-medium border-2">{item?.username}</td>
-                  <td className="px-6 py-4 font-medium border-2">{item?.paymentType}</td>                 
-                  <td className="px-6 py-4 font-medium border-2">{item?.amount}</td>                 
-                  
+                  <td className="px-6 py-4 font-medium border-2">{item?.user_id}</td>
+                  <td className="px-6 py-4 font-medium border-2">{item?.paymentType}</td>
+                  <td className="px-6 py-4 font-medium border-2">{item?.amount}</td>
+                  <td className="px-6 py-4 border-2 border-gray-300">
+                    {item?.requested_date?.split("T")[0]}
+                  </td> 
                   <td className="px-6 py-4 font-medium border-2">
                     {item?.status === 'pending' ? (
-                      <button
-                        className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-                        onClick={() => handleStatusChange(item._id, 0)}
+                      <div
+                        className=" hover:bg-blue-600  font-bold py-2 px-4 rounded"
                       >
-                        Activate
-                      </button>
+                        Pending
+                      </div>
+                    ) : item?.status === 'approved' ? (
+                      <div
+                        className=" hover:bg-green-600  font-bold py-2 px-4 rounded"
+                      >
+                        Approved
+                      </div>
+
                     ) : (
-                      <button
-                        className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-                        onClick={() => handleStatusChange(item._id, 1)}
+                      <div
+                        className=" hover:bg-red-600  font-bold py-2 px-4 rounded"
                       >
-                        Inactive
-                      </button>
+                        Rejected
+                      </div>
                     )}
                     &ensp;
                   </td>
                   <td className="px-6 py-4 font-medium border-2">
                     <div className="flex justify-between">
+                      {item?.status === 'pending' ? (
+                        <div>
+                          <button
+                            className="bg-green-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded"
+                            onClick={() => handleStatusChange(item._id, 'approved')}
+                          >
+                            Approve
+                          </button>&ensp;
+                          <button
+                            className="bg-red-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded"
+                            onClick={() => handleStatusChange(item._id, 'rejected')}
+                          >
+                            Reject
+                          </button>
+                        </div>
+                      ) : '-'}
+
+                      {/* <IoMdEye
+                        className="text-xl text-blue-500 hover:scale-110 cursor-pointer"
+                        onClick={() => navigate(`/view/${item._id}`)}
+                      /> */}
                      
-                      <IoMdEye
-                        className="text-xl text-blue-500 hover:scale-110 cursor-pointer"
-                        onClick={() => navigate(`/viewproject/${item._id}`)}
-                      />
-                      <CiEdit
-                        className="text-xl text-blue-500 hover:scale-110 cursor-pointer"
-                        onClick={() => navigate(`/payment/${item._id}`)}
-                      />
                     </div>
                   </td>
                 </tr>
@@ -245,9 +252,8 @@ const Payment = () => {
         <button
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
           disabled={page === 1}
-          className={`bg-blue-800 text-white p-2 m-5 text-sm rounded-lg ${
-            page === 1 ? "opacity-50" : ""
-          }`}
+          className={`bg-blue-800 text-white p-2 m-5 text-sm rounded-lg ${page === 1 ? "opacity-50" : ""
+            }`}
         >
           Previous
         </button>
@@ -256,9 +262,8 @@ const Payment = () => {
             setPage((prev) => (payment.length === 0 ? prev : prev + 1))
           }
           disabled={payment.length === 0}
-          className={`bg-blue-800 text-white p-2 m-5 text-sm rounded-lg ${
-            payment.length === 0 ? "opacity-50" : ""
-          }`}
+          className={`bg-blue-800 text-white p-2 m-5 text-sm rounded-lg ${payment.length === 0 ? "opacity-50" : ""
+            }`}
         >
           Next
         </button>

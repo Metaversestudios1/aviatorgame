@@ -1,13 +1,61 @@
+const PlaneCrash = require('../Models/PlaneCrash'); // Your PlaneCrash model
+
 module.exports = (io) => {
   let users = {}; // Store user data and their bets
   let multiplier = 0; // Starting multiplier
   let crashPoint = 0; // Where the plane crashes
 
-  const startGame = () => {
+  let crashRanges = []; // Array to store crash ranges from DB
+
+  // Function to fetch crash ranges from the database
+  const fetchCrashRanges = async () => {
+    try {
+      const ranges = await PlaneCrash.find({ deleted_at: null }).exec(); // Fetch active crash ranges
+      crashRanges = ranges.map(range => ({
+        range: [parseFloat(range.firstValue), parseFloat(range.secondValue)],
+        probability: parseFloat(range.crashPercentage) / 100, // Convert percentage to a probability
+      }));
+    } catch (error) {
+      console.error('Error fetching crash ranges from database:', error);
+    }
+  };
+
+  // Function to select a crash range based on weighted probabilities
+  const selectCrashRange = () => {
+    const random = Math.random(); // Random number between 0 and 1
+    let cumulativeProbability = 0;
+
+    for (let i = 0; i < crashRanges.length; i++) {
+      cumulativeProbability += crashRanges[i].probability;
+      if (random <= cumulativeProbability) {
+        return crashRanges[i].range;
+      }
+    }
+
+    // Default to the last range if something goes wrong
+    return crashRanges[crashRanges.length - 1].range;
+  };
+
+  const startGame = async () => {
+
+    
     console.log('Game started');
+
+     // Fetch crash ranges from database before starting the game
+     await fetchCrashRanges();
+
+     if (crashRanges.length === 0) {
+       console.log('No crash ranges available, cannot start game.');
+       return;
+     }
+ 
+     // Select crash range based on probability and generate crash point within that range
+     const crashRange = selectCrashRange();
+     crashPoint = Math.random() * (crashRange[1] - crashRange[0]) + crashRange[0];
+ 
     
     // Generate random crash point (e.g., between 1.5x to 10x)
-    crashPoint = Math.random() * (4 - 1) + 1;
+   // crashPoint = Math.random() * (4 - 1) + 1;
 
     console.log(`Crash point set at: ${crashPoint.toFixed(2)}x`);
 

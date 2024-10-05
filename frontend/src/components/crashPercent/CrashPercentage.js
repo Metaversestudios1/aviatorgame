@@ -16,17 +16,17 @@ const CrashPercentage = () => {
   const [noData, setNoData] = useState(false);
   const [count, setCount] = useState(0);
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState("");
+  
 
   useEffect(() => {
     fetchWins();
-  }, [page, search, filter]);
+  }, [page, search]);
 
   const fetchWins = async () => {
     try {
       setLoader(true);
       const res = await fetch(
-        `http://localhost:8000/api/getAllplanecrash?page=${page}&limit=${pageSize}&search=${search}&filter=${filter}&transactionType=withdraw`
+        `http://localhost:8000/api/getAllplanecrash?page=${page}&limit=${pageSize}&search=${search}&transactionType=withdraw`
       );
       const response = await res.json();
       console.log(response)
@@ -47,10 +47,7 @@ const CrashPercentage = () => {
     if (name === "search") {
       setSearch(value);
       setPage(1);
-    } else if (name === "filter") {
-      setFilter(value);
-      setPage(1);
-    }
+    } 
   };
 
   const handleStatusChange = async (id, newStatus) => {
@@ -150,7 +147,7 @@ const CrashPercentage = () => {
         <div className="text-2xl font-bold mx-2 my-8 px-4">Crash percentage </div>
       </div>
       <div className="flex justify-between">
-        <NavLink to="/crashpercentage/addcrashpercentage">
+        <NavLink to="/addcrashpercentage">
           <button className="bg-blue-800 text-white p-3 m-5 text-sm rounded-lg">
             Add New
           </button>
@@ -163,18 +160,7 @@ const CrashPercentage = () => {
           onChange={handleChange}
           className="text-black border-[1px] rounded-lg bg-white p-2 m-5"
         />
-        <select
-          name="filter"
-          value={filter}
-          onChange={handleChange}
-          className="text-black border-[1px] rounded-lg bg-white p-2 m-5"
-        >
-          <option value="">Select Filter</option>
-          <option value="recent">Recent</option>
-          <option value="oldest">Oldest</option>
-          <option value="running">Running</option>
-          <option value="closed">Closed</option>
-        </select>
+        
       </div>
 
       {loader && (
@@ -222,7 +208,7 @@ const CrashPercentage = () => {
                     <div className="flex justify-center gap-2">
                       <CiEdit
                         className="text-xl text-blue-500 hover:scale-110 cursor-pointer"
-                        onClick={() => navigate(`/crashPercentage/editcrashpercentage/${item._id}`)}
+                        onClick={() => navigate(`/editcrashpercentage/${item._id}`)}
                       />
                       <MdDelete
                         onClick={(e) => handleDelete(e, item?._id)}
