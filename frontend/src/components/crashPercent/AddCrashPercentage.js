@@ -75,7 +75,7 @@ const AddCrashPercentage = () => {
     try {
       setLoader(true);
       console.log(data);
-      const res = await fetch(`http://localhost:8000/api/insertplanecrash`, {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/insertplanecrash`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

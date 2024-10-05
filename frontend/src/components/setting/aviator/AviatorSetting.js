@@ -29,7 +29,7 @@ const AviatorSetting = () => {
     fetchOldData();
   }, []);
   const fetchOldData = async () => {
-    const res = await fetch(`http://localhost:8000/api/getAllSetting`);
+    const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/getAllSetting`);
     const response = await res.json();
     if (response.success) {
       setData({
@@ -93,7 +93,7 @@ const AviatorSetting = () => {
       return;
     }
     try {
-      const res = await fetch(`http://localhost:8000/api/updatesetting`, {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/updatesetting`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
