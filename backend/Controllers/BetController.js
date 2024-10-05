@@ -1,4 +1,4 @@
-const Bet = require('../models/Bet');
+const Bet = require('../Models/Bet');
 const bcrypt = require('bcrypt');
 const insertbet = async (req, res) => {    
     try {

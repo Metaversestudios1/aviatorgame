@@ -1,44 +1,46 @@
 const Transaction = require('../Models/Transaction');
+const User = require('../Models/User');
 // const razorpay = require('razorpay');
 const { options } = require('../Routes/PlayerRoutes');
+
 
 // const razorpay =new razorpay({
 //     Key_id:process.env.RAZORPAY_KEY_ID,
 //     key_secret: process.env.RAZORPAY_KEY_SECRET,
 // })
 
-const createmanualpayment = async(req,res) =>{
-    const { playerId ,amount , transactionId, transactionType } = req.body;
-    try{
-        const payment = new Payment({
-            playerId,
-            paymentType:'manual',
+const createmanualpayment = async (req, res) => {
+    const { user_id, amount, transactionId, transactionType,paymentType,screenshot } = req.body;
+    try {
+        const transaction = new Transaction({
+            user_id,
+            paymentType: paymentType,
             transactionType,
             amount,
             transactionId,
-            'status':'pending',
+            'status': 'pending',
         })
-        payment.save();
-        res.status(201).json({success:true})
+        transaction.save();
+        res.status(201).json({ success: true })
 
-    }catch(err){
-        res.status(500).json({success:false,message:"error creating manual payment",error:err.message})
+    } catch (err) {
+        res.status(500).json({ success: false, message: "error creating manual payment", error: err.message })
     }
 }
 
-const updatemanualpayment= async(req,res)=>{
-    const {paymentId , status} = req.body;
-    try{
+const updatemanualpayment = async (req, res) => {
+    const { paymentId, status } = req.body;
+    try {
         const payment = await Payment.findById(paymentId);
-        if(!payment || payment.paymentType !== 'manual'){
-            return res.status(404).json({success:false,message:"manual payment not found"});
+        if (!payment || payment.paymentType !== 'manual') {
+            return res.status(404).json({ success: false, message: "manual payment not found" });
         }
         payment.status = status;
         await payment.save();
-        
-    }catch(err){
-        res.status(500).json({success:false,message:"error updating manual payment",error:err.message})
-  
+
+    } catch (err) {
+        res.status(500).json({ success: false, message: "error updating manual payment", error: err.message })
+
     }
 }
 
@@ -108,9 +110,9 @@ const updatemanualpayment= async(req,res)=>{
 // };
 
 
-const getpayment = async (req,res) => {
-    console.log(req.body);
-    try{
+const getpayment = async (req, res) => {
+
+    try {
         const pageSize = parseInt(req.query.limit);
         const page = parseInt(req.query.page);
         const search = req.query.search;
@@ -127,7 +129,7 @@ const getpayment = async (req,res) => {
         if (paymentType) {
             query.paymentType = paymentType; // e.g., 'manual' or 'razorpay'
         }
-    
+
         if (transactionType) {
             query.transactionType = transactionType; // e.g., 'recharge' or 'withdraw'
         }
@@ -138,11 +140,41 @@ const getpayment = async (req,res) => {
         const count = await Transaction.find(query).countDocuments();
         res.status(200).json({ success: true, result, count });
 
-    }catch(error){
-        res.status(500).json({success:false,message:"error fetching transaction",error :error.message});
-     }
+    } catch (error) {
+        res.status(500).json({ success: false, message: "error fetching transaction", error: error.message });
+    }
 }
 
+const updatetransaction = async (req, res) => {
+    try {
+        const { id } = req.params
+        const status = req.body.status;
+        const transaction = await Transaction.findById(id);
+        transaction.status = status;
+        await transaction.save();
+console.log(req.body.type );
+        if (req.body.type === 'recharge') {
+            if (req.body.status === 'approved') {
+                const user = await User.findById(transaction.user_id);
+                user.balance += transaction.amount;
+                await user.save();
+            }
+        } else if (req.body.type === 'withdraw') {
+            if (req.body.status === 'approved') {
+                const user = await User.findById(transaction.user_id);
+                user.balance -= transaction.amount;
+                await user.save();
+            }
+        }
+
+        res.status(200).json({ success: true });
+
+    } catch (err) {
+        res.status(500).json({ success: false, message: "error fetching transaction", error: err.message });
+
+    }
+
+}
 
 module.exports = {
     createmanualpayment,
@@ -150,4 +182,5 @@ module.exports = {
     // createRazorpayPayment,
     // verifyRazorpayPayment,
     getpayment,
+    updatetransaction,
 }

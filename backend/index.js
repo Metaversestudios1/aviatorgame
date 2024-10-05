@@ -15,7 +15,7 @@ const server = http.createServer(app);
  // Create socket.io instance attached to server
 
 const corsOptions = {
-  origin: "http://localhost:3000", // Replace with the front-end URL or specific domains you want to allow
+  origin: "https://aviatorgame-frontend.vercel.app", // Replace with the front-end URL or specific domains you want to allow
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // HTTP methods allowed
   allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
   credentials: true, // Allow cookies and authentication headers
@@ -26,13 +26,13 @@ app.use(cors(corsOptions));
 app.use(express.json());
 const io = socketIO(server, {
   cors: {
-    origin: "http://localhost:3000", // Frontend URL
+    origin: "https://aviatorgame-frontend.vercel.app", // Frontend URL
     methods: ["GET", "POST"],
     credentials: true, // Allow credentials
   },
 });
 // Pass io instance to gameController
-gameController(io); // Call your game controller and pass the io instance
+//gameController(io); // Call your game controller and pass the io instance
 
 // Define routes
 const AdminRoute = require("./Routes/AdminRoute");
