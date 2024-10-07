@@ -25,7 +25,7 @@ const corsOptions = {
 
 
  
- console.log(process.env.MONGODB_URI); // Ensure this prints the correct MongoDB connection string
+ // Ensure this prints the correct MongoDB connection string
 
 // Apply CORS middleware to the app
 app.use(cors(corsOptions));
@@ -61,7 +61,8 @@ app.use("/api", PlaneCrashRoutes);
 
 // Root route
 app.get("/", (req, res) => {
-  res.send("Hello World !");
+  res.send(`Hello World !$ {process.env.MONGODB_URI}`);
+  console.log();
 });
 
 // Start the server
