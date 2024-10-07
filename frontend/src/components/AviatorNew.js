@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 
-const socket = io("https://aviatorgame-backend.vercel.app");
+const socket = io(`${process.env.REACT_APP_BACKEND_URL}`);
 
 function AviatorGame() {
   const [betAmount, setBetAmount] = useState(5);
