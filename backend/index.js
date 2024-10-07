@@ -24,7 +24,7 @@ const server = http.createServer(app);
 }
  app.options('*', cors(corsOption));
 // Apply CORS middleware to the app
-app.use(cors(corsOptions));
+app.use(cors(corsOption));
 app.use(express.json());
 const io = socketIO(server, {
   cors: {
