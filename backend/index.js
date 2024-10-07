@@ -12,6 +12,8 @@ connectDB();
 
 // Create server using http
 const server = http.createServer(app);
+server.setTimeout(30000);
+
  // Create socket.io instance attached to server
 
 const corsOptions = {
@@ -24,13 +26,13 @@ const corsOptions = {
 // Apply CORS middleware to the app
 app.use(cors(corsOptions));
 app.use(express.json());
-const io = socketIO(server, {
-  cors: {
-    origin: "https://aviatorgame-frontend.vercel.app", // Frontend URL
-    methods: ["GET", "POST"],
-    credentials: true, // Allow credentials
-  },
-});
+// const io = socketIO(server, {
+//   cors: {
+//     origin: "https://aviatorgame-frontend.vercel.app", // Frontend URL
+//     methods: ["GET", "POST"],
+//     credentials: true, // Allow credentials
+//   },
+// });
 // Pass io instance to gameController
 //gameController(io); // Call your game controller and pass the io instance
 
@@ -61,4 +63,5 @@ app.get("/", (req, res) => {
 // Start the server
 server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
+
 });
