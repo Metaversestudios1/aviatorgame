@@ -20,6 +20,7 @@ const server = http.createServer(app);
   preflightContinue: false,
   credentials: true,
   allowedHeaders: "Content-Type,Authorization",
+  
   optionsSuccessStatus: 204
 }
 
@@ -30,7 +31,7 @@ const io = socketIO(server, {
     methods: ["GET", "POST"],
     credentials: true, // Allow credentials
   },
-  transports: ['websocket'], // Ensure WebSocket is enabled
+  transports: ['websocket', 'polling'], // Add 'polling' for fallback
 });
 // Pass io instance to gameController
 gameController(io); // Call your game controller and pass the io instance
