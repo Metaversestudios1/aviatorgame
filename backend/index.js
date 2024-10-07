@@ -58,13 +58,12 @@ app.use("/api", PlaneCrashRoutes);
 // Root route
 app.get("/", (req, res) => {
   res.send("Hello World !");
-  io.on('connection', (socket) => {
-   // console.log('A user connected:', socket.id);
-    res.send("connect !",socket.id);
-    socket.on('disconnect', () => {
-     // console.log('User disconnected:', socket.id);
-      res.send("disconnnect World !",socket.id);
-    });
+  socket.on('connect', () => {
+    console.log('Connected to server');
+  });
+  
+  socket.on('connect_error', (err) => {
+    console.error('Connection error:', err);
   });
 });
 
