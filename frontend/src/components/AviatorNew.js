@@ -3,6 +3,7 @@ import io from "socket.io-client";
 
 const socket = io(`${process.env.REACT_APP_BACKEND_URL}`);
 
+console.log(socket);
 function AviatorGame() {
   const [betAmount, setBetAmount] = useState(5);
   const [multiplier, setMultiplier] = useState(0);
