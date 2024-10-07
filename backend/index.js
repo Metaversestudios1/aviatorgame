@@ -22,9 +22,7 @@ const server = http.createServer(app);
   allowedHeaders: "Content-Type,Authorization",
   optionsSuccessStatus: 204
 }
- app.options('*', cors(corsOption));
-// Apply CORS middleware to the app
-app.use(cors(corsOption));
+
 app.use(express.json());
 const io = socketIO(server, {
   cors: {
@@ -36,6 +34,9 @@ const io = socketIO(server, {
 // Pass io instance to gameController
 gameController(io); // Call your game controller and pass the io instance
 
+app.options('*', cors(corsOption));
+// Apply CORS middleware to the app
+app.use(cors(corsOption));
 // Define routes
 const AdminRoute = require("./Routes/AdminRoute");
 const UserRoute = require("./Routes/UserRoute");
@@ -57,7 +58,17 @@ app.use("/api", PlaneCrashRoutes);
 
 // Root route
 app.get("/", (req, res) => {
-  res.send("Hello World !");
+ 
+
+
+  io.on('connection', (socket) => {
+    console.log('A user connected:', socket.id);
+    res.send("Hello World !");
+    socket.on('disconnect', () => {
+      res.send('User disconnected:', socket.id);
+      // console.log();
+    });
+  });
 });
 
 // Start the server
@@ -69,10 +80,3 @@ server.timeout = 0; // Disable default server timeout
 
 
 // Socket.IO connection event
-io.on('connection', (socket) => {
-  console.log('A user connected:', socket.id);
-
-  socket.on('disconnect', () => {
-    console.log('User disconnected:', socket.id);
-  });
-});
