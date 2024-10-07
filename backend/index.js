@@ -57,22 +57,7 @@ app.use("/api", PlaneCrashRoutes);
 
 // Root route
 app.get("/", (req, res) => {
- // res.send("Hello World !");
-  io.on('connect', (socket) => {
-    console.log('Connected to server');
-    //res.send('Connected to server');
-    // Handle disconnect
-    socket.on('disconnect', (reason) => {
-      console.log('Disconnected:', reason);
-      res.send('Disconnected:', reason);
-    });
-  
-    // Handle connection errors
-    socket.on('connect_error', (err) => {
-      console.error('Connection error:', err);
-      res.send('Connection error:', err);
-    });
-  });
+  res.send("Hello World !");
 });
 
 // Start the server
@@ -84,3 +69,10 @@ server.timeout = 0; // Disable default server timeout
 
 
 // Socket.IO connection event
+io.on('connection', (socket) => {
+  console.log('A user connected:', socket.id);
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected:', socket.id);
+  });
+});
