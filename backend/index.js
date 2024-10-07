@@ -26,13 +26,13 @@ const server = http.createServer(app);
 // Apply CORS middleware to the app
 app.use(cors(corsOption));
 app.use(express.json());
-const io = socketIO(server, {
-  cors: {
-    origin: "https://aviatorgame-frontend.vercel.app", // Frontend URL
-    methods: ["GET", "POST"],
-    credentials: true, // Allow credentials
-  },
-});
+// const io = socketIO(server, {
+//   cors: {
+//     origin: "https://aviatorgame-frontend.vercel.app", // Frontend URL
+//     methods: ["GET", "POST"],
+//     credentials: true, // Allow credentials
+//   },
+// });
 // Pass io instance to gameController
 //gameController(io); // Call your game controller and pass the io instance
 
@@ -64,3 +64,5 @@ app.get("/", (req, res) => {
 server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+server.timeout = 0; // Disable default server timeout
+
