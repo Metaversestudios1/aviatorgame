@@ -6,6 +6,14 @@ const socket = io('https://aviatorgame-backend.vercel.app', {
   transports: ['websocket'], // Ensure you're using WebSocket for better connectivity
 });
 
+socket.on('connect', () => {
+  console.log('Connected to server');
+});
+
+socket.on('connect_error', (err) => {
+  console.error('Connection error:', err);
+});
+
 console.log(socket);
 function AviatorGame() {
   const [betAmount, setBetAmount] = useState(5);
