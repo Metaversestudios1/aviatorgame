@@ -12,31 +12,27 @@ connectDB();
 
 // Create server using http
 const server = http.createServer(app);
-server.setTimeout(30000);
-
  // Create socket.io instance attached to server
 
-const corsOptions = {
-  origin: "https://aviatorgame-frontend.vercel.app", // Replace with the front-end URL or specific domains you want to allow
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // HTTP methods allowed
-  allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
-  credentials: true, // Allow cookies and authentication headers
- };
-
-
- 
- // Ensure this prints the correct MongoDB connection string
-
+ const corsOption = {
+  origin: "https://aviatorgame-frontend.vercel.app",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  preflightContinue: false,
+  credentials: true,
+  allowedHeaders: "Content-Type,Authorization",
+  optionsSuccessStatus: 204
+}
+ app.options('*', cors(corsOption));
 // Apply CORS middleware to the app
 app.use(cors(corsOptions));
 app.use(express.json());
-// const io = socketIO(server, {
-//   cors: {
-//     origin: "https://aviatorgame-frontend.vercel.app", // Frontend URL
-//     methods: ["GET", "POST"],
-//     credentials: true, // Allow credentials
-//   },
-// });
+const io = socketIO(server, {
+  cors: {
+    origin: "https://aviatorgame-frontend.vercel.app", // Frontend URL
+    methods: ["GET", "POST"],
+    credentials: true, // Allow credentials
+  },
+});
 // Pass io instance to gameController
 //gameController(io); // Call your game controller and pass the io instance
 
@@ -61,12 +57,10 @@ app.use("/api", PlaneCrashRoutes);
 
 // Root route
 app.get("/", (req, res) => {
-  res.send(`Hello World ! ${process.env.MONGODB_URI}`);
-  console.log(process.env.MONGODB_URI);
+  res.send("Hello World !");
 });
 
 // Start the server
 server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
-
 });
