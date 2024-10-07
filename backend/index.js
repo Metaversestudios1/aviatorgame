@@ -66,3 +66,13 @@ server.listen(PORT, () => {
 });
 server.timeout = 0; // Disable default server timeout
 
+
+
+// Socket.IO connection event
+io.on('connection', (socket) => {
+  console.log('A user connected:', socket.id);
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected:', socket.id);
+  });
+});
