@@ -2,9 +2,16 @@ import React, { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 
 // const socket = io(`${process.env.REACT_APP_BACKEND_URL}`);
+// const socket = io('https://aviatorgame-backend.vercel.app', {
+//   transports: ['websocket'], // Ensure you're using WebSocket for better connectivity
+// });
+
 const socket = io('https://aviatorgame-backend.vercel.app', {
-  transports: ['websocket'], // Ensure you're using WebSocket for better connectivity
+  transports: ['websocket'], // Try using 'polling' if needed
+  secure: true,              // Make sure to enable secure if using HTTPS
+  reconnectionAttempts: 5,   // Retry connection attempts
 });
+
 
 socket.on('connect', () => {
   console.log('Connected to server');
