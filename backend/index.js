@@ -30,6 +30,7 @@ const io = socketIO(server, {
     methods: ["GET", "POST"],
     credentials: true, // Allow credentials
   },
+  transports: ['websocket'], // Ensure WebSocket is enabled
 });
 // Pass io instance to gameController
 gameController(io); // Call your game controller and pass the io instance
@@ -59,16 +60,16 @@ app.use("/api", PlaneCrashRoutes);
 // Root route
 app.get("/", (req, res) => {
  
+  res.send("Hello World !");
 
-
-  io.on('connection', (socket) => {
-    console.log('A user connected:', socket.id);
-    res.send("Hello World !");
-    socket.on('disconnect', () => {
-      res.send('User disconnected:', socket.id);
-      // console.log();
-    });
-  });
+  // io.on('connection', (socket) => {
+  //   console.log('A user connected:', socket.id);
+   
+  //   socket.on('disconnect', () => {
+  //     res.send('User disconnected:', socket.id);
+  //     // console.log();
+  //   });
+  // });
 });
 
 // Start the server

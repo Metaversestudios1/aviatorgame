@@ -71,7 +71,6 @@ const Login = () => {
           if (!validateLoginForm()) {
             return;
           }
-          console.log(process.env.REACT_APP_BACKEND_URL);
           setLoading(true);
           const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/login`, {
             method: "POST",
