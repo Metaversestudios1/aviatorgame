@@ -61,8 +61,8 @@ app.use("/api", PlaneCrashRoutes);
 
 // Root route
 app.get("/", (req, res) => {
-  res.send(`Hello World !$ {process.env.MONGODB_URI}`);
-  console.log();
+  res.send(`Hello World ! ${process.env.MONGODB_URI}`);
+  console.log(process.env.MONGODB_URI);
 });
 
 // Start the server
