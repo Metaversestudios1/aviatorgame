@@ -23,16 +23,20 @@ const corsOptions = {
   credentials: true, // Allow cookies and authentication headers
  };
 
+
+ 
+ console.log(process.env.MONGODB_URI); // Ensure this prints the correct MongoDB connection string
+
 // Apply CORS middleware to the app
 app.use(cors(corsOptions));
 app.use(express.json());
-// const io = socketIO(server, {
-//   cors: {
-//     origin: "https://aviatorgame-frontend.vercel.app", // Frontend URL
-//     methods: ["GET", "POST"],
-//     credentials: true, // Allow credentials
-//   },
-// });
+const io = socketIO(server, {
+  cors: {
+    origin: "https://aviatorgame-frontend.vercel.app", // Frontend URL
+    methods: ["GET", "POST"],
+    credentials: true, // Allow credentials
+  },
+});
 // Pass io instance to gameController
 //gameController(io); // Call your game controller and pass the io instance
 
