@@ -1,3 +1,8 @@
+// Controllers/GameController.js
+
+const express = require('express');
+const router = express.Router();
+
 const gameLogic = async (io) => {
   let users = {}; // Store user data and their bets
   let multiplier = 0; // Starting multiplier
@@ -5,8 +10,8 @@ const gameLogic = async (io) => {
 
   const startGame = async () => {
     console.log('Game started');
-    
-    // Generate random crash point (e.g., between 1.5x to 10x)
+
+    // Generate random crash point (e.g., between 1.5x to 4x)
     crashPoint = Math.random() * (4 - 1) + 1;
     console.log(`Crash point set at: ${crashPoint.toFixed(2)}x`);
 
@@ -33,9 +38,11 @@ const gameLogic = async (io) => {
             io.emit('plane_crash', { crashPoint: crashPoint.toFixed(2) });
 
             // After crash, reset game after 5 seconds
-            startGame();
+            setTimeout(() => {
+              startGame();
+            }, 5000); // Delay before starting the next game
           }
-        }, 70); // Every 100ms, increase multiplier by 0.01x
+        }, 70); // Every 70ms, increase multiplier by 0.01x
       }, 5000); // 5 seconds for placing bets
     }, 0);
   };
@@ -71,6 +78,7 @@ const gameLogic = async (io) => {
   // Start the game
   await startGame();
 };
+
 module.exports = (io) => {
   gameLogic(io); // Initialize game logic with the Socket.IO instance
   return router; // Return the router

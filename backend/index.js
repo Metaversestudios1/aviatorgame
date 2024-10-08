@@ -41,8 +41,9 @@ app.use(express.json());
 //   path: '/api/socket', // Set the custom path for Socket.IO
 //   addTrailingSlash: false // Disable trailing slash
 // });
+GameRoutes(io); // This will initialize the game logic
 
- const io = socketIo(server); // Initialize Socket.IO with the server
+const io = socketIo(server); // Initialize Socket.IO with the server
 app.use("/api", GameRoutes(io));
 // Pass io instance to gameController
 // gameController(io); // Call your game controller and pass the io instance
