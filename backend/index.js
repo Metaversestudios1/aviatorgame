@@ -3,6 +3,7 @@ const app = express();
 const http = require("http");
 const socketIO = require("socket.io"); // Import socket.io
 const cors = require("cors");
+
 const connectDB = require("./config/db");
 const PORT = process.env.PORT || 8000;
 const GameRoutes = require("./Routes/GameRoutes"); // Import game logic
@@ -25,7 +26,7 @@ const server = http.createServer(app);
 }
 
 app.use(express.json());
-const io = new Server(server, {
+const io = new socketIO(server, {
   path: '/api/socketconnection',
   addTrailingSlash: false,
 });
