@@ -6,24 +6,6 @@ import io from "socket.io-client";
 //   transports: ['websocket'], // Ensure you're using WebSocket for better connectivity
 // });
 
-const ws = new WebSocket('wss://aviatorgame-backend.vercel.app/socket.io/?EIO=4&transport=websocket');
-
-ws.onopen = () => {
-  console.log('WebSocket connection opened');
-};
-
-ws.onmessage = (event) => {
-  console.log('Message from server:', event.data);
-};
-
-ws.onerror = (error) => {
-  console.error('WebSocket error:', error);
-};
-
-ws.onclose = () => {
-  console.log('WebSocket connection closed');
-};
-
 const socket = io('https://aviatorgame-backend.vercel.app', {
   path: '/socket.io', // Ensure this matches the server setup
   transports: ['websocket'], // Specify the transport method if necessary
