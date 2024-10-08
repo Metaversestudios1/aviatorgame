@@ -3,17 +3,13 @@ const app = express();
 const http = require("http");
 const socketIO = require("socket.io"); // Import socket.io
 const cors = require("cors");
-
 const connectDB = require("./config/db");
 const PORT = process.env.PORT || 8000;
 const GameRoutes = require("./Routes/GameRoutes"); // Import game logic
 
-// Connect to the database
-connectDB();
+const { Server } = require('socket.io');
 
-// Create server using http
-const server = http.createServer(app);
- // Create socket.io instance attached to server
+connectDB();
 
  const corsOption = {
   origin: "https://aviatorgame-frontend.vercel.app",
@@ -26,14 +22,13 @@ const server = http.createServer(app);
 }
 
 app.use(express.json());
-const io = new socketIO(server, {
-  path: '/api/socketconnection',
+const server = http.createServer(app);
+const io = new Server(server, {
+  path: '/api/socketconnection', // Your custom path
   addTrailingSlash: false,
 });
+app.use('/api', GameRoutes(io)); 
 
-app.use("/api", GameRoutes);
-// Pass io instance to gameController
-// gameController(io); // Call your game controller and pass the io instance
 
 app.options('*', cors(corsOption));
 // Apply CORS middleware to the app
