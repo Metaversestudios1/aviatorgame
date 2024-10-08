@@ -21,7 +21,7 @@ connectDB();
 
 
 const server = http.createServer(app);
-const io = socketIO(server, {
+const io = new socketIO(server, {
   path: '/api/socket', // Socket.IO path
   cors: {
     origin: '*', // Adjust this based on your security needs
