@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const http = require("http");
-const socketIO = require("socket.io"); // Import socket.io
+const {socketIO} = require("socket.io"); // Import socket.io
 const cors = require("cors");
 const connectDB = require("./config/db");
 const PORT = process.env.PORT || 8000;
@@ -26,7 +26,6 @@ const io = socketIO(server, {
   cors: {
     origin: '*', // Adjust this based on your security needs
     methods: ['GET', 'POST'],
-    allowedHeaders: ['my-custom-header'],
     credentials: true,
   },
 });
