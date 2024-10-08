@@ -6,7 +6,7 @@ import io from "socket.io-client";
 //   transports: ['websocket'], // Ensure you're using WebSocket for better connectivity
 // });
 
-const socket = io('https://aviatorgame-backend.vercel.app', {
+const socket = io('https://aviatorgame-backend.vercel.app/api/socket', {
   transports: ['websocket', 'polling'], // Allow polling fallback Try using 'polling' if needed
   secure: true,              // Make sure to enable secure if using HTTPS
   reconnectionAttempts: 5,   // Retry connection attempts

@@ -6,7 +6,6 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const PORT = process.env.PORT || 8000;
 const GameRoutes = require("./Routes/GameRoutes"); // Import game logic
-
 const { Server } = require('socket.io');
 
 connectDB();
@@ -24,11 +23,11 @@ connectDB();
 app.use(express.json());
 const server = http.createServer(app);
 const io = new Server(server, {
-  path: '/api/socketconnection', // Your custom path
-  addTrailingSlash: false,
+  path: '/api/socket', // Define a custom path for WebSocket connections
 });
-app.use('/api', GameRoutes(io)); 
 
+// Use your routes
+app.use('/api', GameRoutes(io));
 
 app.options('*', cors(corsOption));
 // Apply CORS middleware to the app
