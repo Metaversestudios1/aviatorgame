@@ -33,6 +33,7 @@ const corsOptions = {
 const server = http.createServer(app);
 const io = new SocketIoServer(server, {
   path: '/socket.io', // Correct path for Socket.IO
+  wssEngine: ['websocket','polling'],
   cors: {
     origin: 'https://aviatorgame-frontend.vercel.app/dashboard', // Adjust according to your frontend
     methods: ['GET', 'POST'],

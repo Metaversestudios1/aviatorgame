@@ -6,9 +6,13 @@ import io from "socket.io-client";
 //   transports: ['websocket'], // Ensure you're using WebSocket for better connectivity
 // });
 
+
+
 const socket = io('https://aviatorgame-backend.vercel.app', {
   path: '/socket.io', // Ensure this matches the server setup
-  transports: ['websocket'], // Specify the transport method if necessary
+  transports: ['websocket','polling'], // Specify the transport method if necessary
+  reconnection:true,
+  reconnectionAttempts:5
 });
 
 
