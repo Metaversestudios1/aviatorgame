@@ -1,18 +1,15 @@
 const { gameLogic } = require('../Controllers/GameController');
-const express = require('express')
+const express = require('express');
 const router = express.Router();
-const io = require("socket.io");
 
-router.post('/socketconnection',gameLogic);
+// Use a single route for socket connection
+router.post('/start-game', (req, res) => {
+  // This endpoint could be used to initialize game logic
+  // Here, you could emit an event to start the game if needed
+  res.status(200).send('Game started');
+});
 
-router.post('/socketconnection', async (req, res) => {
-    try {
-      await gameLogic(io); // Call your game logic with the io instance
-      res.status(200).send('Socket connection established'); // Send a success response
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Internal Server Error'); // Handle errors
-    }
-  });
-  
-  module.exports = router;
+module.exports = (io) => {
+  gameLogic(io); // Call game logic with the io instance
+  return router; // Return the router
+}

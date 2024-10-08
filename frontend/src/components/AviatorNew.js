@@ -1,16 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 
-// const socket = io(`${process.env.REACT_APP_BACKEND_URL}`);
+// const socket = io(`http://localhost:8000`);
 // const socket = io('https://aviatorgame-backend.vercel.app', {
 //   transports: ['websocket'], // Ensure you're using WebSocket for better connectivity
 // });
 
-const socket = io('https://aviatorgame-backend.vercel.app/api/socket', {
-  transports: ['websocket', 'polling'], // Allow polling fallback Try using 'polling' if needed
-  secure: true,              // Make sure to enable secure if using HTTPS
-  reconnectionAttempts: 5,   // Retry connection attempts
-  withCredentials: true
+const socket = io('https://aviatorgame-backend.vercel.app', {
+  path: '/socket.io', // Ensure this matches the server setup
+  transports: ['websocket'], // Specify the transport method if necessary
 });
 
 
