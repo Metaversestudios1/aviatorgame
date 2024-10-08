@@ -21,7 +21,7 @@ const PlaneCrashRoutes = require("./Routes/PlaneCrashRoutes");
 connectDB();
 
 const corsOptions = {
-  origin: "https://aviatorgame-frontend.vercel.app",
+  origin: "https://aviatorgame-frontend.vercel.app/dashboard",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   preflightContinue: false,
   credentials: true,
@@ -33,12 +33,11 @@ const corsOptions = {
 const server = http.createServer(app);
 const io = new SocketIoServer(server, {
   path: '/socket.io', // Correct path for Socket.IO
-  cors: corsOptions,
-  // cors: {
-  //   origin: 'https://aviatorgame-frontend.vercel.app', // Adjust according to your frontend
-  //   methods: ['GET', 'POST'],
-  //   credentials: true,
-  // },
+  cors: {
+    origin: 'https://aviatorgame-frontend.vercel.app/dashboard', // Adjust according to your frontend
+    methods: ['GET', 'POST'],
+    credentials: true,
+  },
 });
 
 // // Middleware to attach io to the request object
