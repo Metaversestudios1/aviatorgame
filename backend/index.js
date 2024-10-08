@@ -6,7 +6,6 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const PORT = process.env.PORT || 8000;
 const GameRoutes = require("./Routes/GameRoutes"); // Import game logic
-const { Server } = require('socket.io');
 
 connectDB();
 
@@ -20,18 +19,26 @@ connectDB();
   optionsSuccessStatus: 204
 }
 
-app.use(express.json());
-const server = http.createServer(app);
-const io = new Server(server, {
-  path: '/api/socket', // Define a custom path for WebSocket connections
-});
 
+const server = http.createServer(app);
+const io = socketIO(server, {
+  path: '/api/socket', // Socket.IO path
+  cors: {
+    origin: '*', // Adjust this based on your security needs
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['my-custom-header'],
+    credentials: true,
+  },
+});
 // Use your routes
 app.use('/api', GameRoutes(io));
 
-app.options('*', cors(corsOption));
+// app.options('*', cors(corsOption));
 // Apply CORS middleware to the app
 app.use(cors(corsOption));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
+
 // Define routes
 const AdminRoute = require("./Routes/AdminRoute");
 const UserRoute = require("./Routes/UserRoute");
