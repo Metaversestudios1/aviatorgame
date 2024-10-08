@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
 const http = require("http");
-const {socketIO} = require("socket.io"); // Import socket.io
+// const { Server } = require("socket.io"); // Import socket.io
+const { Server: SocketIoServer} = require('socket.io');
 const cors = require("cors");
 const connectDB = require("./config/db");
 const PORT = process.env.PORT || 8000;
@@ -21,7 +22,7 @@ connectDB();
 
 
 const server = http.createServer(app);
-const io = new socketIO(server, {
+const io = new Server(server, {
   path: '/api/socket', // Socket.IO path
   cors: {
     origin: '*', // Adjust this based on your security needs
