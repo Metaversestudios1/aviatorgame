@@ -79,7 +79,6 @@ const gameLogic = async (io) => {
   await startGame();
 };
 
-module.exports = (io) => {
-  gameLogic(io); // Initialize game logic with the Socket.IO instance
-  return router; // Return the router
-};
+module.exports = {
+  gameLogic // Initialize game logic with the Socket.IO instance
+ };

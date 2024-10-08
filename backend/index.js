@@ -25,26 +25,12 @@ const server = http.createServer(app);
 }
 
 app.use(express.json());
+const io = new Server(server, {
+  path: '/api/socketconnection',
+  addTrailingSlash: false,
+});
 
-// const io = socketIO(server, {
-//   cors: {
-//     origin: "https://aviatorgame-frontend.vercel.app", // Frontend URL
-//     methods: ["GET", "POST"],
-//     credentials: true, // Allow credentials
-   
-//   },
-//    transports: ['websocket', 'polling'],
-//   // Add 'polling' for fallback
-// });
-
-// const io = new Server(server, { 
-//   path: '/api/socket', // Set the custom path for Socket.IO
-//   addTrailingSlash: false // Disable trailing slash
-// });
-GameRoutes(io); // This will initialize the game logic
-
-const io = socketIo(server); // Initialize Socket.IO with the server
-app.use("/api", GameRoutes(io));
+app.use("/api", GameRoutes);
 // Pass io instance to gameController
 // gameController(io); // Call your game controller and pass the io instance
 
