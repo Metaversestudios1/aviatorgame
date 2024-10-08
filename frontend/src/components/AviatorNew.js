@@ -8,7 +8,7 @@ import io from "socket.io-client";
 
 
 
-const socket = io('https://aviatorgame-backend.vercel.app', {
+const socket = io('wss://aviatorgame-backend.vercel.app', {
   path: '/socket.io', // Ensure this matches the server setup
   transports: ['websocket','polling'], // Specify the transport method if necessary
   reconnection:true,
