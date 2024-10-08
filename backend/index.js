@@ -22,7 +22,7 @@ connectDB();
 
 
 const server = http.createServer(app);
-const io = new Server(server, {
+const io = new SocketIoServer(server, {
   path: '/api/socket', // Socket.IO path
   cors: {
     origin: '*', // Adjust this based on your security needs
