@@ -7,7 +7,7 @@ import io from "socket.io-client";
 // });
 
 const socket = io('https://aviatorgame-backend.vercel.app', {
- transports: ['websocket', 'polling'], // Allow polling fallback Try using 'polling' if needed
+  transports: ['websocket', 'polling'], // Allow polling fallback Try using 'polling' if needed
   secure: true,              // Make sure to enable secure if using HTTPS
   reconnectionAttempts: 5,   // Retry connection attempts
   withCredentials: true
