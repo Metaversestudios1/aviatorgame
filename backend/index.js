@@ -25,13 +25,15 @@ const server = http.createServer(app);
 }
 
 app.use(express.json());
+
 const io = socketIO(server, {
   cors: {
     origin: "https://aviatorgame-frontend.vercel.app", // Frontend URL
     methods: ["GET", "POST"],
     credentials: true, // Allow credentials
-   // transports: ['websocket', 'polling'],
+   
   },
+   transports: ['websocket', 'polling'],
   // Add 'polling' for fallback
 });
 // Pass io instance to gameController
