@@ -33,11 +33,12 @@ const corsOptions = {
 const server = http.createServer(app);
 const io = new SocketIoServer(server, {
   path: '/socket.io', // Correct path for Socket.IO
-  cors: {
-    origin: 'https://aviatorgame-frontend.vercel.app', // Adjust according to your frontend
-    methods: ['GET', 'POST'],
-    credentials: true,
-  },
+  cors: corsOptions,
+  // cors: {
+  //   origin: 'https://aviatorgame-frontend.vercel.app', // Adjust according to your frontend
+  //   methods: ['GET', 'POST'],
+  //   credentials: true,
+  // },
 });
 
 // // Middleware to attach io to the request object
