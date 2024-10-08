@@ -30,8 +30,9 @@ const io = socketIO(server, {
     origin: "https://aviatorgame-frontend.vercel.app", // Frontend URL
     methods: ["GET", "POST"],
     credentials: true, // Allow credentials
+    transports: ['websocket', 'polling'],
   },
-  transports: ['websocket', 'polling'], // Add 'polling' for fallback
+  // Add 'polling' for fallback
 });
 // Pass io instance to gameController
 gameController(io); // Call your game controller and pass the io instance
