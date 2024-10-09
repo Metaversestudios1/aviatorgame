@@ -16,6 +16,7 @@ const BankRoutes = require("./Routes/BankRoutes");
 const PlayerRoutes = require("./Routes/PlayerRoutes");
 const PaymentRoutes = require("./Routes/PaymentRoutes");
 const PlaneCrashRoutes = require("./Routes/PlaneCrashRoutes");
+const UserKycRoutes = require("./Routes/UserKycRoutes");
 
 // Connect to the database
 connectDB();
@@ -64,7 +65,7 @@ app.use("/api", BankRoutes);
 app.use("/api", PlayerRoutes);
 app.use("/api", PaymentRoutes);
 app.use("/api", PlaneCrashRoutes);
-
+app.use("/api", UserKycRoutes);
 // Root route
 app.get("/", (req, res) => {
   res.send("Hello World !");

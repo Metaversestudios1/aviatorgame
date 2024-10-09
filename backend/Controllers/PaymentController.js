@@ -20,7 +20,7 @@ const createmanualpayment = async (req, res) => {
             transactionId,
             'status': 'pending',
         })
-        transaction.save();
+        await transaction.save();
         res.status(201).json({ success: true })
 
     } catch (err) {
@@ -118,7 +118,7 @@ const getpayment = async (req, res) => {
         const search = req.query.search;
         const transactionType = req.query.transactionType;
         const paymentType = req.query.paymentType;
-
+        const status = req.query.status;
         const query = {
             deleted_at: null,
         };
@@ -128,6 +128,9 @@ const getpayment = async (req, res) => {
 
         if (paymentType) {
             query.paymentType = paymentType; // e.g., 'manual' or 'razorpay'
+        }
+        if (status) {
+            query.status = status; // e.g., 'manual' or 'razorpay'
         }
 
         if (transactionType) {
@@ -176,11 +179,37 @@ console.log(req.body.type );
 
 }
 
+const getpaymentid = async(req,res) => {
+    const { id, transactionType } = req.query; // Destructure id and transactionType from req.query
+
+    console.log(req.query);
+    
+    try {
+        const query = { _id: id }; // Build the query with _id
+    
+        if (transactionType) {
+            query.transactionType = transactionType; // Add transactionType if it exists
+        }
+    
+        const result = await Transaction.find(query); // Query the database
+        if (!result || result.length === 0) {
+            return res.status(404).json({ message: "No transactions found" });
+        }
+    
+        res.status(201).json({ success: true, result });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Server error" });
+    }
+    
+}
+
 module.exports = {
     createmanualpayment,
     updatemanualpayment,
     // createRazorpayPayment,
     // verifyRazorpayPayment,
+    getpaymentid,
     getpayment,
     updatetransaction,
 }
