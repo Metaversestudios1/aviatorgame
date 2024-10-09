@@ -9,6 +9,11 @@ const UserbankSchma = new mongoose.Schema(
     ifscCode: { type: String },
     mobileNo: { type: String },
     upiId: { type: String },
+    KYCStatus: {
+      type: String,
+      enum: ['pending', 'approved', 'rejected'],
+      default: 'pending',
+  },
     deleted_at: {
         type: Date,
         default: null,
