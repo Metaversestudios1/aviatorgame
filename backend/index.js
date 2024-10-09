@@ -21,7 +21,7 @@ const PlaneCrashRoutes = require("./Routes/PlaneCrashRoutes");
 connectDB();
 
 const corsOptions = {
-  origin: "https://aviatorgame-frontend.vercel.app/dashboard",
+  origin: "https://aviatorgame-frontend.vercel.app",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   preflightContinue: false,
   credentials: true,
@@ -33,9 +33,8 @@ const corsOptions = {
 const server = http.createServer(app);
 const io = new SocketIoServer(server, {
   path: '/socket.io', // Correct path for Socket.IO
-  wssEngine: ['websocket','polling'],
   cors: {
-    origin: 'https://aviatorgame-frontend.vercel.app/dashboard', // Adjust according to your frontend
+    origin: 'https://aviatorgame-frontend.vercel.app', // Adjust according to your frontend
     methods: ['GET', 'POST'],
     credentials: true,
   },
