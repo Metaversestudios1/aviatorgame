@@ -19,16 +19,7 @@ const User = () => {
     fetchData();
   }, [page, search]);
 
-  const fetchRoleName = async (id) => {
-    const roleRes = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/getSingleRole`, {
-      method: "POST",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify({ id }),
-    });
-    const roleData = await roleRes.json();
-    const type = roleData.success ? roleData.data[0].role : "Unknown";
-    return type;
-  };
+
 
   const fetchData = async () => {
     setLoader(true);
@@ -210,6 +201,9 @@ const User = () => {
                 <th scope="col" className="px-6 py-3 border-2 border-gray-300">
                   Created At
                 </th>
+                <th scope="col" className="px-6 py-3 border-2 border-gray-300">
+                  Action
+                </th>
               </tr>
             </thead>
 
@@ -235,7 +229,7 @@ const User = () => {
                     {item?.balance}
                   </td>
                   <td className="px-6 py-4 border-2 border-gray-300">
-                    {item?.email}
+                    {item?.contact}
                   </td>
                   <td className="px-6 py-4 border-2 border-gray-300">
                     {item?.email}
@@ -244,7 +238,17 @@ const User = () => {
                   <td className="px-6 py-4 border-2 border-gray-300">
                     {item?.createdAt?.split("T")[0]}
                   </td>
-                 
+                  <td className=" py-5 pl-5 gap-1 border-2  border-gray-300">
+                    <div className="flex items-center">
+                      <NavLink to={`/users/${item?._id}`}>
+                        <IoMdEye className="text-2xl cursor-pointer text-blue-900" />
+                      </NavLink>
+                      <MdDelete
+                        onClick={(e) => handleDelete(e, item?._id)}
+                        className="text-2xl cursor-pointer text-red-900"
+                      />
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
