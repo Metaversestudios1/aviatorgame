@@ -128,7 +128,35 @@ function App() {
       ),
     },
     {
+      path: "/rechargehistory/:id",
+      element: (
+        <PrivateRoute>
+        <div className="flex h-screen">
+          <Sidebar sidebar={sideBar} className="flex-1" toggleSideBar={toggleSideBar}/>
+          <div className="flex flex-col flex-grow overflow-y-auto flex-[3]">
+            <Navbar toggleSideBar={toggleSideBar} />
+            <RechargeHistory/>
+          </div>
+        </div>
+        </PrivateRoute>
+      ),
+    },
+    {
       path: "/withdrawhistory",
+      element: (
+        <PrivateRoute>
+        <div className="flex h-screen">
+          <Sidebar sidebar={sideBar} className="flex-1" toggleSideBar={toggleSideBar}/>
+          <div className="flex flex-col flex-grow overflow-y-auto flex-[3]">
+            <Navbar toggleSideBar={toggleSideBar} />
+            <WithdrawHistory/>
+          </div>
+        </div>
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: "/withdrawhistory/:id",
       element: (
         <PrivateRoute>
         <div className="flex h-screen">
