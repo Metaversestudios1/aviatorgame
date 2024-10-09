@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { IoMdEye } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
-import { NavLink } from "react-router-dom";
+import { NavLink,useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,11 +16,11 @@ const Payment = () => {
   const [noData, setNoData] = useState(false);
   const [count, setCount] = useState(0);
   const [search, setSearch] = useState("");
- 
+  const { id } = useParams(); 
 
   useEffect(() => {
     fetchPayment();
-  }, [page, search]);
+  }, [page, search,id]);
 
     const fetchuserName = async (id) => {
         const userRes = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/getSingleuser`, {
@@ -38,9 +38,19 @@ const Payment = () => {
   const fetchPayment = async () => {
     try {
       setLoader(true);
-      const res = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/api/getpayment?page=${page}&limit=${pageSize}&search=${search}&transactionType=withdraw`
-      );
+      let apiUrl;
+      if (id) {
+        // If the ID is present in the URL, fetch data for that specific user
+        apiUrl = `${process.env.REACT_APP_BACKEND_URL}/api/getpaymentid?id=${id}&transactionType=withdraw`;
+      } else {
+        // If no ID in URL, fetch all users as usual
+        apiUrl = `${process.env.REACT_APP_BACKEND_URL}/api/getpayment?page=${page}&limit=${pageSize}&search=${search}&transactionType=withdraw`;
+      }
+      const res = await fetch(apiUrl);
+
+      // const res = await fetch(
+      //   `${process.env.REACT_APP_BACKEND_URL}/api/getpayment?page=${page}&limit=${pageSize}&search=${search}&transactionType=withdraw`
+      // );
       const response = await res.json();
       if (response.success) {
 
