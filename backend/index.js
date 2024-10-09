@@ -46,7 +46,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/api', GameRoutes(io));
+//app.use('/api', GameRoutes(io));
 // app.use('/api', GameRoutes);
 
 // Apply CORS middleware to the app
