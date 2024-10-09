@@ -2,7 +2,7 @@ const {  insertUserBank,
     updateUserBank,
     getAllUserBank,
     getSingleUserBank,
-    deleteUserBank,updatekycstatus,getSingleUserBankID} = require('../Controllers/userKycController');
+    deleteUserBank,updatekycstatus,getSingleUserBankID} = require('../Controllers/UserKycController');
 const express = require('express');
 const router = express.Router();
 
