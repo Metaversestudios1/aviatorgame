@@ -77,11 +77,8 @@ function App() {
    
     {
       path: "/aviatornew",
-      element: (
-        <PrivateRoute>
-       
-            <AviatorNew/>
-        </PrivateRoute>
+      element: (  
+            <AviatorNew/>        
       ),
     },
     {
