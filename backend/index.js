@@ -7,7 +7,7 @@ const connectDB = require("./config/db");
 const PORT = process.env.PORT || 8001;
 
 // Import your routes
-// const GameRoutes = require("./Routes/GameRoutes");
+const GameRoutes = require("./Routes/GameRoutes");
 const AdminRoute = require("./Routes/AdminRoute");
 const UserRoute = require("./Routes/UserRoute");
 const BetRoutes = require("./Routes/BetRoutes");
@@ -47,7 +47,7 @@ const io = new SocketIoServer(server, {
 //   next();
 // });
 
-//app.use('/api', GameRoutes(io));
+app.use('/api', GameRoutes(io));
 // app.use('/api', GameRoutes);
 
 // Apply CORS middleware to the app
