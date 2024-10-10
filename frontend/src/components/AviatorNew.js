@@ -8,7 +8,7 @@ import io from "socket.io-client";
 
 
 
-const socket = io('${process.env.REACT_APP_BACKEND_URL}', {
+const socket = io('https://aviatorgame-9ukw.onrender.com', {
   path: '/socket.io', // Ensure this matches the server setup
   transports: ['websocket','polling'], // Specify the transport method if necessary
   reconnection:true,
