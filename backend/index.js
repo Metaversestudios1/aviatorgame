@@ -4,7 +4,7 @@ const http = require("http");
 const { Server: SocketIoServer } = require('socket.io');
 const cors = require("cors");
 const connectDB = require("./config/db");
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8001;
 
 // Import your routes
 // const GameRoutes = require("./Routes/GameRoutes");
