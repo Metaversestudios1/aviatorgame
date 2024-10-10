@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const settingSchema = new mongoose.Schema(
     {
         gameStatus: { type: Number,  }, // Active or inactive
+        withdrawalFee: { type: Number,  },
         minBetAmount: { type: Number,  },
         maxBetAmount: { type: Number,  },
         initialBonus: { type: Number,  },

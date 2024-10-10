@@ -12,6 +12,7 @@ const AviatorSetting = () => {
     gameStatus: "",
     minBetAmount: 0,
     maxBetAmount: 0,
+    withdrawalFee: 0,
     initialBonus: 0,
     minRecharge: 0,
     minWithdraw: 0,
@@ -35,6 +36,7 @@ const AviatorSetting = () => {
       setData({
         ...data,
         gameStatus: response.result[0].gameStatus,
+        withdrawalFee: response.result[0].withdrawalFee,
         minBetAmount: response.result[0].minBetAmount,
         maxBetAmount: response.result[0].maxBetAmount,
         initialBonus: response.result[0].initialBonus,
@@ -70,6 +72,7 @@ const AviatorSetting = () => {
       },
       messages: {
         gameStatus: { required: "Please enter game status" },
+        withdrawalFee: { required: "Please enter Withdrawal fee, it will be consider as in percentage" },
         minBetAmount: { required: "Please enter min bet amount" },
         maxBetAmount: { required: "Please enter max bet amount" },
         initialBonus: { required: "Please enter initial bonus" },
@@ -176,6 +179,23 @@ const AviatorSetting = () => {
                 <option value="0">Inactive</option>
                 <option value="1">Active</option>
               </select>
+            </div>
+            <div className="my-4 relative">
+              <label
+                htmlFor="withdrawalFee"
+                className="block mb-2 text-lg font-medium text-gray-900 dark:text-black"
+              >
+              Withdrawal Fee
+              </label>
+              <input
+                type="text"
+                name="withdrawalFee"
+                id="withdrawalFee"
+                value={data.withdrawalFee}
+                onChange={handleChange}
+                className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-black block w-full p-2.5 "
+                placeholder="Enter Min Bet Amount"
+              />
             </div>
             <div className="my-4 relative">
               <label
