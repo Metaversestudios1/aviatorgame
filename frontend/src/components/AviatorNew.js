@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 
-// const socket = io(`${process.env.REACT_APP_BACKEND_URL}`);
+// const socket = io(`http://localhost:8000`);
 // const socket = io('https://aviatorgame-backend.vercel.app', {
 //   transports: ['websocket'], // Ensure you're using WebSocket for better connectivity
 // });
 
 
 
-const socket = io('https://aviatorgame-9ukw.onrender.com', {
+const socket = io('http://localhost:8000', {
   path: '/socket.io', // Ensure this matches the server setup
   transports: ['websocket','polling'], // Specify the transport method if necessary
   reconnection:true,
@@ -42,75 +42,74 @@ function AviatorGame() {
 
   const gameRef = useRef(null);
 
-  useEffect(() => {
-    socket.on("multiplier_reset", () => {
-      setIsBetPlaced(false);
-      setBetAmount(0);
-      setLoadingComplete(false);
-      setIsPlaneVisible(false); // Hide the plane during loading
-      setTimeout(() => {
-        setIsCrashed(false);
-        setShowLoader(true);
-        setMessage("");
-        setCrashPoint("");
-      }, 2000);
-      setTimeout(() => {
-        setShowLoader(false);
-        setLoadingComplete(true);
-        setIsPlaneVisible(true); // Show the plane after loading
-        movePlaneDiagonally(); // Start plane movement
-        setMessage("");
-        setWinnings(0);
-      }, 5000);
-    });
+useEffect(() => {
+  socket.on("multiplier_reset", () => {
+    // Reset all states for the new round
+    setIsBetPlaced(false);
+    setBetAmount(0);
+    setLoadingComplete(false);
+    setIsPlaneVisible(false); // Hide the plane during loading
+    setMultiplier(0); // Reset multiplier to 0 to avoid showing old values
+    setIsCrashed(false); // Reset crashed state early
+    setMessage("");
+    setCrashPoint("");
 
-    socket.on("betting_open", () => {
-      setIsBettingOpen(true);
-    });
+    // Show the loader and delay the start of the new round
+    setShowLoader(true);
+    setTimeout(() => {
+      setLoadingComplete(true);
+      setShowLoader(false); // Hide loader after loading is complete
+      setIsPlaneVisible(false); // Keep the plane hidden until the multiplier starts
+      setWinnings(0);
+    }, 5000); 
+  });
 
-    socket.on("betting_close", () => {
-      setIsBettingOpen(false);
-    });
+  socket.on("betting_open", () => {
+    setIsBettingOpen(true);
+  });
 
-    socket.on("multiplier_update", (data) => {
-      setMultiplier(data.multiplier);
+  socket.on("betting_close", () => {
+    setIsBettingOpen(false);
+  });
 
-      // Ensure the plane becomes visible when multiplier updates
-      if (!isCrashed && !isPlaneVisible) {
-        setIsPlaneVisible(true);
-        movePlaneDiagonally(); // Move the plane if it's not crashed
-      }
-    });
+  socket.on("multiplier_update", (data) => {
+    setMultiplier(data.multiplier);
 
-    socket.on("plane_crash", ({ crashPoint }) => {
-      setIsPlaneVisible(false)
-      setIsCrashed(true);
-      setShowLoader(true);
-      setMessage(`Flew away`);
-      setCrashPoint(crashPoint);
-      resetPlanePosition();
-    });
+    // Ensure the plane becomes visible only when multiplier updates
+    if (!isCrashed && !isPlaneVisible) {
+      setIsPlaneVisible(true);
+      movePlaneDiagonally(); // Start moving the plane after multiplier is updated
+    }
+  });
 
-    socket.on("cash_out_success", (data) => {
-      setCashOutMultiplier(data.message);
-      setWinnings(data.winnings);
-    });
+  socket.on("plane_crash", ({ crashPoint }) => {
+    setIsPlaneVisible(false); // Hide the plane immediately on crash
+    setIsCrashed(true); // Set crash state
+    setShowLoader(true); // Show loader during crash reset
+    setMessage(`Flew away`);
+    setCrashPoint(crashPoint);
+    resetPlanePosition(); // Reset plane position for next round
+  });
 
-    return () => {
-      socket.off("multiplier_reset");
-      socket.off("betting_open");
-      socket.off("betting_close");
-      socket.off("multiplier_update");
-      socket.off("plane_crash");
-      socket.off("cash_out_success");
-    };
-  }, [isPlaneVisible, isCrashed]);
+  socket.on("cash_out_success", (data) => {
+    setCashOutMultiplier(data.message);
+    setWinnings(data.winnings);
+  });
+
+  return () => {
+    socket.off("multiplier_reset");
+    socket.off("betting_open");
+    socket.off("betting_close");
+    socket.off("multiplier_update");
+    socket.off("plane_crash");
+    socket.off("cash_out_success");
+  };
+}, [isPlaneVisible, isCrashed]);
+
 
   const resetPlanePosition = () => {
-    setTimeout(() => {
       setPlanePosition({ x: 0, y: 0 });
       setShowLoader(false);
-    }, 5000);
   };
 
   const movePlaneDiagonally = () => {

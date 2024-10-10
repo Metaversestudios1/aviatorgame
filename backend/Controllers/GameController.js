@@ -61,7 +61,6 @@ const gameLogic = async (io) => {
     multiplier = 1; // Reset multiplier
     io.emit('multiplier_reset', { multiplier: 0 }); // Notify frontend to reset and show bet input
 
-    setTimeout(() => {
       io.emit('betting_open', { isBettingOpen: true }); // Open betting window for 5 seconds
       console.log('Betting is now open.');
 
@@ -85,9 +84,9 @@ const gameLogic = async (io) => {
               startGame();
             }, 5000); // Delay before starting the next game
           }
-        }, 70); // Every 70ms, increase multiplier by 0.01x
-      }, 5000); // 5 seconds for placing bets
-    }, 0);
+        }, 80); // Every 70ms, increase multiplier by 0.01x
+      },5000); // 5 seconds for placing bets
+
   };
 
   io.on('connection', (socket) => {
