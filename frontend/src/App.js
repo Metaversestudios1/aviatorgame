@@ -21,6 +21,7 @@ import User from "./components/User/User"
 import KYCUser from "./components/KYCUser/kycuser"
 import Request from "./components/Request"
 import ShowUser from "./components/User/ShowUser"
+import PromocodeSetting from './components/setting/promocode/PromocodeSetting';
 
 function App() {
   const [sideBar, setSideBar] = useState(true);
@@ -273,6 +274,20 @@ function App() {
           <div className="flex flex-col flex-grow overflow-y-auto flex-[3]">
             <Navbar toggleSideBar={toggleSideBar} />
             <Request/>
+          </div>
+        </div>
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: "/promocodesetting",
+      element: (
+        <PrivateRoute>
+        <div className="flex h-screen">
+          <Sidebar sidebar={sideBar} className="flex-1" toggleSideBar={toggleSideBar}/>
+          <div className="flex flex-col flex-grow overflow-y-auto flex-[3]">
+            <Navbar toggleSideBar={toggleSideBar} />
+            <PromocodeSetting/>
           </div>
         </div>
         </PrivateRoute>

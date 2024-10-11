@@ -117,19 +117,18 @@ const getAlluser = async (req,res) => {
         res.status(500).json({success:false,message:"error inserting user"});
      }
 }
-const getSingleuser = async(req, res) => {
-    const { id } = req.body;
-    try {
-
-        const result = await User.findOne({ _id: id });
-        if (!result) {
-            res.status(404).json({ success: false, message: "user not found" });
-        }
-        res.status(201).json({ success: true, result: result });
-    } catch (error) {
-        res.status(500).json({ success: false, message: "error fetching user" });
-    }
-}
+const getSingleuser = async (req, res) => {
+  const { id } = req.body;
+  try {
+      const result = await User.findOne({ _id: id });
+      if (!result) {
+          return res.status(404).json({ success: false, message: "User not found" });
+      }
+      return res.status(200).json({ success: true, result });
+  } catch (error) {
+      return res.status(500).json({ success: false, message: "Error fetching user", error: error.message });
+  }
+};
 
 const deleteuser = async(req, res) => {
     try{

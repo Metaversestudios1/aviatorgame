@@ -29,7 +29,7 @@ const Payment = () => {
   const fetchuserName = async (id) => {
     const userRes = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/getSingleuser`, {
       method: "POST",
-      headers: { "Content-type": "application/json" },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id }),
     });
     const userData = await userRes.json();
