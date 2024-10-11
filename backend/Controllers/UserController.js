@@ -3,40 +3,231 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const jwt = require("jsonwebtoken");
-const insertuser = async (req, res) => {
-    const { password, ...userData } = req.body;
-    try {
-      // Check for required fields
-      if (!password || !userData.username) {
-        return res.status(401).json({ success: false, message: "Please provide all fields" });
-      }
+const twilio = require('twilio');
+const Promocode =  require('../Models/User');
+
+
+const sendmailsms = async (req, res) => {
+  const { email, contact } = req.body;
   
-      // Password length validation
-      if (password.length < 4) {
-        return res.status(401).json({
-          success: false,
-          message: "Password must contain a minimum of 4 digits",
-        });
-      }
-  
-      let u_id = Math.floor(1000 + Math.random() * 9000); // Generates a 4-digit random number
-      const existingUser = await User.findOne({ u_id });
-      while (existingUser) {
-        u_id = Math.floor(1000 + Math.random() * 9000); // Regenerate if not unique
-      }
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
-      const newUser = new User({
-        ...userData,
-        u_id,
-        password: hashedPassword,
-      });
-      await newUser.save();
-      res.status(201).json({ success: true });
-    } catch (err) {
-      res.status(500).json({ success: false, message: "Error inserting user", error: err.message });
+  try {
+    let existingUser;
+
+    // Check for existing user by email or contact
+    if (email) {
+      existingUser = await User.findOne({ email });
     }
-  };
+
+    if (contact) {
+      existingUser = await User.findOne({ contact });
+    }
+
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email or mobile number already used.' });
+    }
+
+    // Create transporter for sending email
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      requireTLS: true,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    // Generate OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString().padStart(6, '0');
+
+    // Check if email is present and send OTP via email
+    if (email) {
+      await transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'Your OTP Code',
+        text: `Your OTP code is ${otp}`,
+      });
+      console.log(`OTP sent to email: ${email}`);
+    }
+
+    // Check if contact is present and send OTP via SMS
+    if (contact) {
+      const formattedContact = contact.startsWith('+') ? contact : `+91${contact}`; // Assuming +91 is the country code for India
+      const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
+      
+      await twilioClient.messages.create({
+        body: `Your registration confirmation code is ${otp}`, // Customize the message body
+        from: process.env.TWILIO_PHONE_NUMBER,
+        to: formattedContact,
+      });
+      console.log(`OTP sent to SMS: ${formattedContact}`);
+    }
+
+    // Set OTP expiration time (10 minutes from now)
+    const otpExpires = Date.now() + 10 * 60 * 1000;
+
+    // Create new user with OTP details
+    const newUser = new User({
+      email,
+      contact,
+      otp, // Store OTP
+      otpExpires,
+      isVerified: false // Mark as unverified until OTP is confirmed
+    });
+
+    await newUser.save();
+    res.status(200).json({ message: 'OTP sent successfully', otp });
+  } catch (error) {
+    console.error('Error sending OTP:', error);
+    res.status(500).json({ message: 'Failed to send OTP', error: error.message });
+  }
+};
+
+
+const verifyotpreg = async (req, res) => {
+  const { email, contact, otp } = req.body;
+  try {
+    let user;
+
+    // Check if email is present and find the user by email
+    if (email) {
+      user = await User.findOne({ email });
+
+      if (!user) {
+        return res.status(400).json({ message: 'User not found with this email.' });
+      }
+    }
+
+    // If email is not present, check if contact is present and find the user by contact
+    if (contact) {
+      user = await User.findOne({ contact });
+
+      if (!user) {
+        return res.status(400).json({ message: 'User not found with this contact.' });
+      }
+    }
+
+    // Check if OTP exists for the user
+    if (!user.otp) {
+      return res.status(400).json({ message: 'OTP has not been generated or has already been used.' });
+    }
+
+    // Check if the OTP has expired
+    if (user.otpExpiresreg && user.otpExpiresreg < new Date()) {
+      return res.status(400).json({ message: 'OTP has expired. Please request a new one.' });
+    }
+    if (user.otp == otp) {
+       user.isVerified = true;
+      user.otp = undefined; // Remove OTP after verification
+      user.otpExpiresAt = undefined; // Clear expiration time
+      await user.save();
+
+      return res.status(200).json({ message: 'User verified successfully.' });
+    } else {
+      return res.status(400).json({ message: 'Invalid OTP.' });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error.' });
+  }
+};
+
+// const insertuser = async (req, res) => {
+//     const { password, ...userData } = req.body;
+//     try {
+//       // Check for required fields
+//       if (!password || !userData.username) {
+//         return res.status(401).json({ success: false, message: "Please provide all fields" });
+//       }
+  
+//       // Password length validation
+//       if (password.length < 4) {
+//         return res.status(401).json({
+//           success: false,
+//           message: "Password must contain a minimum of 4 digits",
+//         });
+//       }
+  
+//       let u_id = Math.floor(1000 + Math.random() * 9000); // Generates a 4-digit random number
+//       const existingUser = await User.findOne({ u_id });
+//       while (existingUser) {
+//         u_id = Math.floor(1000 + Math.random() * 9000); // Regenerate if not unique
+//       }
+//       const salt = await bcrypt.genSalt(10);
+//       const hashedPassword = await bcrypt.hash(password, salt);
+//       const newUser = new User({
+//         ...userData,
+//         u_id,
+//         password: hashedPassword,
+//       });
+//       await newUser.save();
+//       res.status(201).json({ success: true });
+//     } catch (err) {
+//       res.status(500).json({ success: false, message: "Error inserting user", error: err.message });
+//     }
+//   };
+
+const insertuser = async (req, res) => {
+  const { password, promocode, ...userData } = req.body;
+  
+  try {
+    // Check for required fields
+    if (!password || !userData.username) {
+      return res.status(401).json({ success: false, message: "Please provide all fields" });
+    }
+
+    // Password length validation
+    if (password.length < 4) {
+      return res.status(401).json({
+        success: false,
+        message: "Password must contain a minimum of 4 digits",
+      });
+    }
+
+    let u_id = Math.floor(1000 + Math.random() * 9000); // Generates a 4-digit random number
+    const existingUser = await User.findOne({ u_id });
+    while (existingUser) {
+      u_id = Math.floor(1000 + Math.random() * 9000); // Regenerate if not unique
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Handle promocode logic
+    let promoCodeUsed = null;
+    if (promocode) {
+      // Check if the provided promocode exists in the database
+      const promocodeRecord = await Promocode.findOne({ code: promocode });
+      if (!promocodeRecord) {
+        return res.status(400).json({ success: false, message: "Invalid promocode" });
+      }
+
+      // Mark promocode as used by the new user
+      promocodeRecord.usedBy.push({ userId: u_id, dateUsed: Date.now() });
+      await promocodeRecord.save();
+
+      promoCodeUsed = promocode;
+    } else {
+      // Generate a new promocode for the user if none is provided
+      promoCodeUsed = `PROMO_${u_id.toString().slice(0, 4).toUpperCase()}`;
+    }
+
+    const newUser = new User({
+      ...userData,
+      u_id,
+      password: hashedPassword,
+      promocode: promoCodeUsed, // Store the promocode used
+    });
+
+    await newUser.save();
+    res.status(201).json({ success: true, promocode: promoCodeUsed });
+
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Error inserting user", error: err.message });
+  }
+};
 
   const updateuser = async(req,res)=>{
     const updatedata = req.body;
@@ -57,13 +248,13 @@ const insertuser = async (req, res) => {
   }
 
   const userlogin = async(req,res)=>{
-    const {email, password}= req.body;
+    const {email, password,mobile}= req.body;
     try{
 
-        if(!email|| !password){
+        if(!email || !password){
             return res.status(404).json({sucess:false,message:"please provide all fields"});
         }
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ $or: [{ email }, { mobile }] });
         if(!user){
             return res.status(404).json({sucess:false,message:"user not found"});
         }
@@ -117,18 +308,19 @@ const getAlluser = async (req,res) => {
         res.status(500).json({success:false,message:"error inserting user"});
      }
 }
-const getSingleuser = async (req, res) => {
-  const { id } = req.body;
-  try {
-      const result = await User.findOne({ _id: id });
-      if (!result) {
-          return res.status(404).json({ success: false, message: "User not found" });
-      }
-      return res.status(200).json({ success: true, result });
-  } catch (error) {
-      return res.status(500).json({ success: false, message: "Error fetching user", error: error.message });
-  }
-};
+const getSingleuser = async(req, res) => {
+    const { id } = req.body;
+    try {
+
+        const result = await User.findOne({ _id: id });
+        if (!result) {
+            res.status(404).json({ success: false, message: "user not found" });
+        }
+        res.status(201).json({ success: true, result: result });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "error fetching user" });
+    }
+}
 
 const deleteuser = async(req, res) => {
     try{
@@ -268,4 +460,6 @@ module.exports= {
     sendotp,
     verifyOtp,
     resetPassword,
+    sendmailsms,
+    verifyotpreg,
 }

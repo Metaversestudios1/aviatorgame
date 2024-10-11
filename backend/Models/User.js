@@ -7,7 +7,6 @@ const UserSchema = new mongoose.Schema(
     },
     user_id: {
       type: String,
-      unique: true,
     },
     contact: { type: String},
     password: {
@@ -28,11 +27,23 @@ const UserSchema = new mongoose.Schema(
     promocode:{
       type: String,
     },
+    promocodeStatus: { // New field to store promocode status
+      type: Boolean,
+      default: false, // Default to false if not set
+    },
     resetOtp: {
       type: String,
     },
     otpExpires: {
       type: Date,
+    },
+    otp: { type: String }, // Store OTP temporarily
+    isVerified: { type: Boolean, default: false }, // Status to track verification
+    otpExpiresreg:{
+      type: Date,
+    },
+    currency: {
+      type: String,
     },
     status: {
       type: Number,
