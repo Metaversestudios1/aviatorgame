@@ -19,9 +19,9 @@ function App() {
         <Welcome onWelcomeEnd={handleWelcomeEnd} />
       ) : (
         <Routes>
-          {/* <Route path="/" element={<Home />} /> */}
           <Route path="/" element={<LoginSignup />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/home" element={<Home />} />
         </Routes>
       )}
     </Router>

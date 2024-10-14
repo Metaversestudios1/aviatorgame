@@ -4,9 +4,10 @@ import { IoLogoGoogle, IoMdEyeOff } from 'react-icons/io'
 import { IoEye } from 'react-icons/io5'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function Phone() {
+  const navigate = useNavigate();
   const [phone, setPhone] = useState()
   const [passwordVisible, setPasswordVisible] = useState(false)
 
@@ -41,7 +42,7 @@ export default function Phone() {
         </span>
         <Link><p className='text-sm text-sky-300'>Forgot Password ?</p></Link>
       </div>
-      <button className='bg-red-600 text-white uppercase p-2 font-medium'>Login</button>
+      <button className='bg-red-600 text-white uppercase p-2 font-medium' onClick={()=>navigate('/home')}>Login</button>
       <div className='flex flex-col justify-center text-white mt-4 gap-2'>
         <p className='text-sm mx-auto'>Log In Via</p>
         <div className='flex justify-between gap-3 mb-4'>
