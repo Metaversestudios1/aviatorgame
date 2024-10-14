@@ -352,7 +352,7 @@ const sendotp = async (req, res) => {
         .status(404)
         .json({ success: false, message: "user not found" });
     }
-    const otp = crypto.randomInt(100000, 999999).toString();
+    const otp = crypto.randomInt(1000, 9999).toString();
     const otpExpires = Date.now() + 10 * 60 * 1000;
     const update = await User.updateOne(
       { email: user.email },
