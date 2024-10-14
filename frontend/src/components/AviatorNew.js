@@ -24,7 +24,6 @@ socket.on('connect_error', (err) => {
   console.error('Connection error:', err);
 });
 
-console.log(socket);
 function AviatorGame() {
   const [betAmount, setBetAmount] = useState(5);
   const [multiplier, setMultiplier] = useState(0);
@@ -224,9 +223,10 @@ useEffect(() => {
             </div>
           ) : (
             <>
-              <div className="absolute top-[15%] left-2/4 -translate-x-2/4 -translate-y-2/4 z-50 ">
+              <div className="absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 z-50 ">
                 <div className="text-3xl font-bold">{message}</div>
-                <div className="text-3xl text-[#de3232] font-bold">{crashPoint}</div>
+                <div className="text-3xl text-[#de3232] font-bold">{crashPoint?crashPoint+"x":""}</div>
+
               </div>
             </>
           )}

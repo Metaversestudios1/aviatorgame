@@ -4,7 +4,7 @@ const http = require("http");
 const { Server: SocketIoServer } = require('socket.io');
 const cors = require("cors");
 const connectDB = require("./config/db");
-const PORT = process.env.PORT || 8001;
+const PORT = process.env.PORT || 8000;
 
 // Import your routes
 const GameRoutes = require("./Routes/GameRoutes");
@@ -17,6 +17,7 @@ const PlayerRoutes = require("./Routes/PlayerRoutes");
 const PaymentRoutes = require("./Routes/PaymentRoutes");
 const PlaneCrashRoutes = require("./Routes/PlaneCrashRoutes");
 const UserKycRoutes = require("./Routes/UserKycRoutes");
+const PromoCodeRoutes = require("./Routes/PromoCodeRoutes");
 
 // Connect to the database
 connectDB();
@@ -66,6 +67,7 @@ app.use("/api", PlayerRoutes);
 app.use("/api", PaymentRoutes);
 app.use("/api", PlaneCrashRoutes);
 app.use("/api", UserKycRoutes);
+app.use("/api", PromoCodeRoutes);
 // Root route
 app.get("/", (req, res) => {
   res.send("Hello World !");

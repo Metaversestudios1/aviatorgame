@@ -161,7 +161,7 @@ const Payment = () => {
       {loader && (
         <div className="absolute h-full w-full flex justify-center items-center">
           <div
-            className="flex justify-center h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent text-surface dark:text-white"
+            className="flex justify-center h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent text-surface  "
             role="status"
           >
             <span className="absolute m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0">

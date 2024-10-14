@@ -29,7 +29,7 @@ const Home = () => {
   const fetchPendingRechargesCount = async () => {
     const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/getpayment`);
     const response = await res.json();
-    const count = response?.result.map(
+    const count = response?.result.filter(
       (item) => item.transactionType == "recharge" && item.status == "pending" 
     );
     setTotalPendingRecharges(count.length);
@@ -37,7 +37,7 @@ const Home = () => {
   const fetchPendingWithdrawsCount = async () => {
     const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/getpayment`);
     const response = await res.json();
-    const count = response?.result.map(
+    const count = response?.result.filter(
       (item) => item.transactionType == "withdraw" && item.status == "pending" 
     );
     setTotalPendingWithdraws(count.length);
@@ -50,15 +50,15 @@ const Home = () => {
   const fetchTotalRechargesCount = async () => {
     const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/getpayment`);
     const response = await res.json();
-    const requestsCount = response?.result.map(
-      (item) => item.KYCStatus == "pending"
+    const requestsCount = response?.result.filter(
+      (item) => item.transactionType == "recharge"
     );
-    setKycRequests(requestsCount.length);
+    setTotalRecharges(requestsCount.length);
   };
   const fetchTotalWithdrawsCount = async () => {
     const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/getpayment`);
     const response = await res.json();
-    const count = response?.result.map(
+    const count = response?.result.filter(
       (item) => item.transactionType == "withdraw"
     );
     setTotalWithdraws(count.length);
@@ -67,17 +67,18 @@ const Home = () => {
     const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/getAllUserBank`);
     const response = await res.json();
     console.log(response);
-    const count = response?.result.map(
-      (item) => item.transactionType == "recharge"
+    const count = response?.result.filter(
+      (item) => item.kycstatus == "pending"
     );
-    setTotalRecharges(count.length);
+    console.log(count)
+    setKycRequests(count.length);
   };
   return (
     <div>
       {loader ? (
         <div className="absolute z-20 h-full w-full md:right-6 flex justify-center items-center">
           <div
-            className=" flex justify-center h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
+            className=" flex justify-center h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] "
             role="status"
           >
             <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
@@ -90,7 +91,7 @@ const Home = () => {
           <>
             {" "}
             <div className="bg-white shadow-lg shadow-gray-200 rounded-2xl p-4">
-              <NavLink to="/employees">
+              <NavLink to="/users">
                 <div className="flex items-center">
                   <div className="inline-flex flex-shrink-0 justify-center items-center w-12 h-12 text-white bg-[#1E88E5] to-voilet-500 rounded-lg">
                     <svg
@@ -118,7 +119,7 @@ const Home = () => {
               </NavLink>
             </div>
             <div className="bg-white shadow-lg shadow-gray-200 rounded-2xl p-4">
-              <NavLink to="/projects">
+              <NavLink to="/request">
                 <div className="flex items-center">
                   <div className="inline-flex flex-shrink-0 justify-center items-center w-12 h-12 text-white bg-[#1E88E5] to-voilet-500 rounded-lg">
                     <svg
@@ -146,7 +147,7 @@ const Home = () => {
               </NavLink>
             </div>
             <div className="bg-white shadow-lg shadow-gray-200 rounded-2xl p-4">
-              <NavLink to="/tasks">
+              <NavLink to="/rechargehistory">
                 <div className="flex items-center">
                   <div className="inline-flex flex-shrink-0 justify-center items-center w-12 h-12 text-white bg-[#1E88E5] to-voilet-500 rounded-lg">
                     <svg
@@ -174,7 +175,7 @@ const Home = () => {
               </NavLink>
             </div>
             <div className="bg-white shadow-lg shadow-gray-200 rounded-2xl p-4">
-              <NavLink to="/tasks">
+              <NavLink to="/withdrawhistory">
                 <div className="flex items-center">
                   <div className="inline-flex flex-shrink-0 justify-center items-center w-12 h-12 text-white bg-[#1E88E5] to-voilet-500 rounded-lg">
                     <svg
@@ -202,7 +203,7 @@ const Home = () => {
               </NavLink>
             </div>
             <div className="bg-white shadow-lg shadow-gray-200 rounded-2xl p-4">
-              <NavLink to="/tasks">
+              <NavLink to="/request">
                 <div className="flex items-center">
                   <div className="inline-flex flex-shrink-0 justify-center items-center w-12 h-12 text-white bg-[#1E88E5] to-voilet-500 rounded-lg">
                     <svg
@@ -230,7 +231,7 @@ const Home = () => {
               </NavLink>
             </div>
             <div className="bg-white shadow-lg shadow-gray-200 rounded-2xl p-4">
-              <NavLink to="/tasks">
+              <NavLink to="/request">
                 <div className="flex items-center">
                   <div className="inline-flex flex-shrink-0 justify-center items-center w-12 h-12 text-white bg-[#1E88E5] to-voilet-500 rounded-lg">
                     <svg

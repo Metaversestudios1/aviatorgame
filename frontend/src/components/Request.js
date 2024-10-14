@@ -29,7 +29,7 @@ const Payment = () => {
   const fetchuserName = async (id) => {
     const userRes = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/getSingleuser`, {
       method: "POST",
-      headers: { "Content-type": "application/json" },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id }),
     });
     const userData = await userRes.json();
@@ -196,7 +196,7 @@ const Payment = () => {
       {loader && (
         <div className="absolute h-full w-full flex justify-center items-center">
           <div
-            className="flex justify-center h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent text-surface dark:text-white"
+            className="flex justify-center h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent text-surface  "
             role="status"
           >
             <span className="absolute m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0">
