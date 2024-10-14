@@ -24,7 +24,6 @@ const Welcome = ({ onWelcomeEnd }) => {
       <div className="progress-bar absolute">
         <div className="progress" style={{ width: `${progress}%` }}></div>
       </div>
-      {/* <p>{progress}%</p> */}
     </div>
   );
 };

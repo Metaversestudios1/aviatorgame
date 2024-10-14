@@ -40,7 +40,7 @@ export default function Phone() {
           <input type="checkbox" name="" id=""  className='border border-red-600'/>
           <p className='text-xs'>Remember me</p>
         </span>
-        <Link><p className='text-sm text-sky-300'>Forgot Password ?</p></Link>
+        <Link to={'/password-reset'}><p className='text-sm text-sky-300'>Forgot Password ?</p></Link>
       </div>
       <button className='bg-red-600 text-white uppercase p-2 font-medium' onClick={()=>navigate('/home')}>Login</button>
       <div className='flex flex-col justify-center text-white mt-4 gap-2'>

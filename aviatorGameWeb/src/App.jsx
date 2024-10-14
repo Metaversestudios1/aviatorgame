@@ -4,13 +4,15 @@ import Welcome from './pages/Welcome';
 import Home from './pages/Home';
 import LoginSignup from './pages/LoginSignup';
 import Register from './pages/Register';
+import ResetPassword from './pages/resetPassword';
+import ResetOtpScreen from './pages/ResetOtpScreen';
 
 
 function App() {
   const [showWelcome, setShowWelcome] = useState(true);
 
   const handleWelcomeEnd = () => {
-    setShowWelcome(false); // Hide the welcome page after it's done
+    setShowWelcome(false);
   };
 
   return (
@@ -22,6 +24,8 @@ function App() {
           <Route path="/" element={<LoginSignup />} />
           <Route path="/register" element={<Register />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/password-reset" element={<ResetPassword />} />
+          <Route path="/password-reset-otp" element={<ResetOtpScreen />} />
         </Routes>
       )}
     </Router>
