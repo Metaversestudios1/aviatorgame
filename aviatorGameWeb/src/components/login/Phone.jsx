@@ -95,11 +95,12 @@ export default function Phone() {
         });
         Cookies.set("jwt", response.token);
         //setAuth({ isAuthenticated: true, user: response.user });
-        
+      
         const redirectPath = localStorage.getItem('redirectAfterLogin') || '/home';
-        localStorage.removeItem('redirectAfterLogin');
+       
         setTimeout(() => {
           navigate(redirectPath);
+          localStorage.removeItem('redirectAfterLogin');
         }, 1500);
       } else {
         setLoading(false);
