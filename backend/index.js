@@ -22,8 +22,8 @@ const PromoCodeRoutes = require("./Routes/PromoCodeRoutes");
 // Connect to the database
 connectDB();
 const allowedOrigins = [
-  "https://aviatorgame-frontend.vercel.app/",  // Website frontend
-  "https://aviatorgame-web.vercel.app/",     // Admin panel frontend
+  "https://aviatorgame-frontend.vercel.app",  // Website frontend
+  "https://aviatorgame-web.vercel.app",     // Admin panel frontend
 ];
 const corsOptions = {
   origin: function (origin, callback) {
