@@ -3,6 +3,7 @@ import BG from './../assets/images/login/bg.png'
 import Header from '../components/home/Header'
 import Footer from '../components/home/Footer'
 import TxnHistoryModal from '../components/home/TxnHistoryModal ';
+import GameHistoryModal from '../components/home/GameHistoryModal';
 
 export default function Home() {
   const [isFooterHidden, setIsFooterHidden] = useState(false);
@@ -28,6 +29,7 @@ export default function Home() {
         </div>
       {/* // )} */}
       {activeModal === 'txn' && <TxnHistoryModal  onClose={closeModal} />}
+      {activeModal === 'gameHistory' && <GameHistoryModal onClose={closeModal} />}
     </div>
   )
 }

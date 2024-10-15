@@ -31,7 +31,7 @@ export default function Footer({ hideFooter, setActiveModal }) {
             <img src={leader} alt="coin" className='w-6 md:w-11'/>
             <p className='font-semibold text-xs md:text-md'>Leaderboards</p>
             </span>
-            <span className='flex flex-col justify-center items-center text-white cursor-pointer'>
+            <span className='flex flex-col justify-center items-center text-white cursor-pointer' onClick={() => openModal('gameHistory')}>
             <img src={game} alt="settings" className='w-6 md:w-11'/>
             <p className='font-semibold text-xs md:text-md'>Game History</p>
             </span>
