@@ -1,0 +1,33 @@
+.error{
+    color: #dc2626 !important;
+  }
+.Toastify__toast {
+    background-color: white; /* Change this to the color you want */
+    color: black; /* Text color */
+    border: 1px solid #ccc; /* Optional: Add a border */
+  }
+  
+  .Toastify__toast--success {
+    background-color: #4caf50; /* Success color */
+    color: white; /* Text color for success */
+  }
+  
+  .Toastify__toast--error {
+    background-color: #f44336; /* Error color */
+    color: white; /* Text color for error */
+  }
+  
+  /* Additional custom styles for the toast */
+  .Toastify__toast--info {
+    background-color: #2196F3; /* Info color */
+    color: white; /* Text color for info */
+  }
+  
+  .Toastify__toast--warning {
+    background-color: #ff9800; /* Warning color */
+    color: white; /* Text color for warning */
+  }
+ 
+#password-error{
+    color: red;
+}

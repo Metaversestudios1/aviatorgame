@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import './App.css';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import Welcome from './pages/Welcome';
 import Home from './pages/Home';
 import LoginSignup from './pages/LoginSignup';
 import Register from './pages/Register';
-import ResetPassword from './pages/resetPassword';
+import ResetPassword from './pages/ResetPassword';
 import ResetOtpScreen from './pages/ResetOtpScreen';
 
 
