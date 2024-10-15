@@ -21,16 +21,25 @@ const PromoCodeRoutes = require("./Routes/PromoCodeRoutes");
 
 // Connect to the database
 connectDB();
-
+const allowedOrigins = [
+  "https://aviatorgame-frontend.vercel.app",  // Website frontend
+  "https://aviatorgame-web.vercel.app",     // Admin panel frontend
+];
 const corsOptions = {
-  origin: "https://aviatorgame-frontend.vercel.app",
+  origin: function (origin, callback) {
+    // Check if the incoming request's origin is in the allowed origins
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   preflightContinue: false,
   credentials: true,
   allowedHeaders: "Content-Type,Authorization",
   optionsSuccessStatus: 204,
 };
-
 // Create HTTP server and Socket.IO server
 const server = http.createServer(app);
 const io = new SocketIoServer(server, {

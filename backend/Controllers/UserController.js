@@ -118,11 +118,9 @@ const verifyotpreg = async (req, res) => {
 
     // Check if OTP exists for the user
     if (!user.otp) {
-      return res
-        .status(400)
-        .json({
-          message: "OTP has not been generated or has already been used.",
-        });
+      return res.status(400).json({
+        message: "OTP has not been generated or has already been used.",
+      });
     }
 
     // Check if the OTP has expired
@@ -153,13 +151,11 @@ const insertuser = async (req, res) => {
   try {
     // Check for required fields: password and either email or contact
     if (!password || (!userData.email && !userData.contact)) {
-      return res
-        .status(401)
-        .json({
-          success: false,
-          message:
-            "Please provide all required fields: password and either email or contact.",
-        });
+      return res.status(401).json({
+        success: false,
+        message:
+          "Please provide all required fields: password and either email or contact.",
+      });
     }
 
     // Password length validation
@@ -170,10 +166,16 @@ const insertuser = async (req, res) => {
       });
     }
 
+    const query = {};
+    if (userData.email) query.email = userData.email;
+    if (userData.contact) query.contact = userData.contact;
+
+    const existingUser = await User.findOne(query);
+
     // Check for existing user by email or contact
-    const existingUser = await User.findOne({
-      $or: [{ email: userData.email }, { contact: userData.contact }],
-    });
+    // const existingUser = await User.findOne({
+    //   $or: [{ email: userData.email }, { contact: userData.contact }],
+    // });
 
     if (existingUser) {
       // Update existing user's fields
@@ -206,13 +208,11 @@ const insertuser = async (req, res) => {
     // If no existing user found, respond with an error
     return res.status(404).json({ success: false, message: "User not found" });
   } catch (err) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Error registration user",
-        error: err.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: "Error registration user",
+      error: err.message,
+    });
   }
 };
 
@@ -229,25 +229,27 @@ const updateuser = async (req, res) => {
     }
     res.status(201).json({ success: true, result: result });
   } catch (err) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "error in updating the user",
-        error: err.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: "error in updating the user",
+      error: err.message,
+    });
   }
 };
 
 const userlogin = async (req, res) => {
   const { email, password, contact } = req.body;
   try {
-    if (!email || !password) {
+    if (!password || (!email && !contact)) {
       return res
         .status(404)
         .json({ sucess: false, message: "please provide all fields" });
     }
-    const user = await User.findOne({ $or: [{ email }, { contact }] });
+    const query = {};
+    if (email) query.email = email;
+    if (contact) query.contact = contact;
+
+    const user = await User.findOne(query);
     if (!user) {
       return res.status(404).json({ sucess: false, message: "user not found" });
     }
@@ -442,13 +444,11 @@ const resetPassword = async (req, res) => {
       .json({ success: true, message: "Password reset successfully." });
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Server error. Please try again later.",
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: "Server error. Please try again later.",
+      error: error.message,
+    });
   }
 };
 module.exports = {
