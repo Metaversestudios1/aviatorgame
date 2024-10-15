@@ -8,6 +8,7 @@ import io from "socket.io-client";
 
 
 
+
 const socket = io('https://aviatorgame-9ukw.onrender.com', {
   path: '/socket.io', // Ensure this matches the server setup
   transports: ['websocket','polling'], // Specify the transport method if necessary
@@ -110,45 +111,49 @@ useEffect(() => {
       setPlanePosition({ x: 0, y: 0 });
       setShowLoader(false);
   };
-
   const movePlaneDiagonally = () => {
     const gameWidth = gameRef.current.offsetWidth;
     const gameHeight = gameRef.current.offsetHeight;
-
+  
     let xPos = 0;
     let yPos = 0;
-
-    const interval = setInterval(() => {
-      xPos += gameWidth / 100; // Move by 1% of the width each interval
-      yPos += gameHeight / 100; // Move by 1% of the height each interval
-
+  
+    const animate = () => {
+      xPos += gameWidth / 500; // Adjust for smoother, slower movement
+      yPos += gameHeight / 500;
+  
       setPlanePosition({ x: xPos, y: yPos });
-
-      // Stop when it reaches the end of the screen (with 10px margin)
-      if (xPos >= gameWidth - 70 || yPos >= gameHeight - 95) {
-        clearInterval(interval);
-        oscillatePlane(xPos, yPos); // Pass the final position to the oscillate function
+  
+      // Stop when it reaches the end of the screen
+      if (xPos < gameWidth - 70 && yPos < gameHeight - 95) {
+        requestAnimationFrame(animate); // Continue animating
+      } else {
+        oscillatePlane(xPos, yPos); // Start oscillating when plane reaches the end
       }
-    }, 50); // Update every 50ms
+    };
+  
+    requestAnimationFrame(animate); // Start the animation loop
   };
-
+  
   const oscillatePlane = (finalX, finalY) => {
     const oscillationAmplitude = 14; // Height of oscillation
-    const oscillationFrequency = 0.1; // Speed of oscillation
+    const oscillationFrequency = 0.05; // Speed of oscillation
     let oscillationPhase = 0;
-
-    // Start oscillating from the final position
-    const oscillationInterval = setInterval(() => {
+  
+    const animateOscillation = () => {
       oscillationPhase += oscillationFrequency;
       const newY = finalY + oscillationAmplitude * Math.sin(oscillationPhase);
-      setPlanePosition({ x: finalX, y: newY }); // Keep X position constant and update Y
-
-      // Stop oscillation after a certain period (e.g., 2 seconds)
-      if (isCrashed) {
-        clearInterval(oscillationInterval);
+  
+      setPlanePosition({ x: finalX, y: newY }); // Update Y position for oscillation
+  
+      if (!isCrashed) {
+        requestAnimationFrame(animateOscillation); // Continue oscillating
       }
-    }, 50); // Update every 50ms
+    };
+  
+    requestAnimationFrame(animateOscillation); // Start the oscillation animation
   };
+  
 
   const handlePlaceBet = () => {
     if (betAmount > 0 && isBettingOpen) {
