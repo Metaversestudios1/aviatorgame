@@ -4,6 +4,9 @@ import Header from '../components/home/Header'
 import Footer from '../components/home/Footer'
 import TxnHistoryModal from '../components/home/TxnHistoryModal ';
 import GameHistoryModal from '../components/home/GameHistoryModal';
+import Leaderboard from '../components/home/Leaderboard';
+import Wallet from '../components/home/Wallet';
+import Deposite from '../components/home/Deposite';
 
 export default function Home() {
   const [isFooterHidden, setIsFooterHidden] = useState(false);
@@ -30,6 +33,9 @@ export default function Home() {
       {/* // )} */}
       {activeModal === 'txn' && <TxnHistoryModal  onClose={closeModal} />}
       {activeModal === 'gameHistory' && <GameHistoryModal onClose={closeModal} />}
+      {activeModal === 'leaderBoard' && <Leaderboard onClose={closeModal} />}
+      {activeModal === 'wallet' && <Wallet onClose={closeModal}  hideFooter={handleHideFooter} setActiveModal={setActiveModal}/>}
+      {activeModal === 'addmoney' && <Deposite onClose={closeModal} />}
     </div>
   )
 }

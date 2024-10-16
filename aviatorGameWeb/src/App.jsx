@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import './App.css';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import Welcome from './pages/Welcome';
 import Home from './pages/Home';
 import LoginSignup from './pages/LoginSignup';
 import Register from './pages/Register';
-import ResetPassword from './pages/ResetPassword';
+import ResetPassword from './pages/resetPassword';
 import ResetOtpScreen from './pages/ResetOtpScreen';
+import GameScreen from './pages/GameScreen';
 
 
 function App() {
@@ -27,6 +27,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/password-reset" element={<ResetPassword />} />
           <Route path="/password-reset-otp" element={<ResetOtpScreen />} />
+          <Route path="/aviator-game" element={<GameScreen />} />
         </Routes>
       )}
     </Router>

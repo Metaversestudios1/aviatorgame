@@ -122,7 +122,7 @@ export default function Header() {
         </span>
         <span className="flex flex-col justify-center items-center text-white cursor-pointer">
           <img src={exit} alt="settings" className="w-6 md:w-11" />
-          <p className="font-semibold">Settings</p>
+          <p className="font-semibold">Exit Game</p>
         </span>
       </div>
     </div>
