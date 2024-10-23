@@ -2,14 +2,48 @@ import React, { useEffect, useState } from 'react'
 import QRcode from './../../assets/images/wallet/QR.png'
 import { RxCross2 } from 'react-icons/rx'
 import SuccessfulDeposit from './SuccessfulDeposit'
+import { createManualDeposit } from '../../services/api'
+import { toast } from 'react-toastify'
+import Cookies from 'js-cookie';
 
 export default function Deposite({onClose}) {
   const [showConfirmation,setShowConfirmation] = useState(false)
   const [success,setSuccess] = useState(false)
+  const [amount, setAmount] = useState('')
+  const [transactionId, setTransactionId] = useState('')
 
-  const handleSubmit = ()=>{
-    setShowConfirmation(false)
-    setSuccess(true)
+  const handleSubmit = async()=>{
+    
+    const userCookie = Cookies.get('user');
+
+    if (userCookie) {
+      const user = JSON.parse(userCookie);
+      
+      // Extract userId
+      const userId = user._id;  
+    try {
+      const userData = {
+        user_id:userId,
+        amount: amount,
+        transactionId: transactionId,
+        transactionType:'recharge',
+        paymentType:'manual'
+      }
+      const response = await createManualDeposit(userData)
+      if(response.status === 201){
+        toast.success('Your Deposite submited.')
+        setShowConfirmation(false)
+        setSuccess(true)
+        setAmount('')
+        setTransactionId('')
+      }
+    } catch (error) {
+      console.log(error);
+      
+      toast.error('Error on submit Deposite')
+    }}
+    // setShowConfirmation(false)
+    // setSuccess(true)
   }
   // close success 
   useEffect(() => {
@@ -41,11 +75,11 @@ export default function Deposite({onClose}) {
             {/* <h3>Deposot Details</h3> */}
             <div className="w-1/2 mx-auto">
             <p className='text-white font-medium'>Enter deposited amount</p>
-              <input type="number" placeholder='Deposite amount' className="w-full bg-transparent text-white p-2 outline-none border-2 border-red-600 my-1 rounded-sm"/>
+              <input type="number" value={amount} onChange={(e)=>setAmount(e.target.value)} placeholder='Deposite amount' className="w-full bg-transparent text-white p-2 outline-none border-2 border-red-600 my-1 rounded-sm"/>
            </div>
             <div className="w-1/2 mx-auto">
             <p className='text-white font-medium'>Enter transation Id</p>
-              <input type="text" placeholder='Transation ID' className="w-full bg-transparent text-white p-2 outline-none border-2 border-red-600 my-1 rounded-sm"/>
+              <input type="text" value={transactionId} onChange={(e)=>setTransactionId(e.target.value)} placeholder='Transation ID' className="w-full bg-transparent text-white p-2 outline-none border-2 border-red-600 my-1 rounded-sm"/>
            </div>
            <button className='w-1/2 mx-auto bg-red-700 my-3 p-2 rounded-md' onClick={()=>setShowConfirmation(true)}>Submit</button>
           </div>

@@ -2,14 +2,55 @@ import React, { useState } from 'react'
 import { IoMdEyeOff } from 'react-icons/io'
 import { IoEye } from 'react-icons/io5'
 import { Link } from 'react-router-dom'
+import { loginByEmail } from '../../services/api'
+import { toast } from 'react-toastify'
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom'
+
 
 export default function Email() {
-  const [email, setEmail] = useState()
+  const [email, setEmail] = useState('')
   const [passwordVisible, setPasswordVisible] = useState(false)
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible)
   }
+  // login email
+  const handleLoginEmail = async () => {
+    if (!email || !password) {
+      toast.error('Fill all fields!');
+      return;
+    }
+    setLoading(true)
+    try {
+      const response = await loginByEmail(email, password);
+      console.log(response);
+  
+      // Check if the response is successful
+      if (response?.data?.success) {
+        // Store token in cookies
+        Cookies.set('token', response.data.token, { expires: 7 }); // Set token with 7-day expiry
+        
+        // Store user data in cookies
+        Cookies.set('user', JSON.stringify(response.data.user), { expires: 7 });
+  
+        toast.success('Login successful!');
+        navigate('/home');
+        setEmail('')
+        setPassword('')
+      } else {
+        toast.error('Login failed!'); 
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error('An error occurred during login.');
+    }
+    setLoading(false)
+  };
+  
   return (
     <div className='flex flex-col gap-3'>
       <div className='flex flex-col gap-2'>
@@ -18,7 +59,9 @@ export default function Email() {
         <input
           type='email'
           placeholder='Enter your Email Id'
-          className='bg-transparent outline-none flex-grow text-white'
+          className='bg-transparent outline-none flex-grow text-white w-full'
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         </div>
       </div>
@@ -27,6 +70,8 @@ export default function Email() {
           type={passwordVisible ? 'text' : 'password'}
           placeholder='Password*'
           className='bg-transparent outline-none flex-grow text-white'
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <button type='button' onClick={togglePasswordVisibility} className='text-white ml-2'>
           {passwordVisible ? <IoEye className='text-sky-500'/> : <IoMdEyeOff className='text-sky-500'/>}
@@ -39,7 +84,7 @@ export default function Email() {
         </span>
         <Link to={'/password-reset'}><p className='text-sm text-sky-300'>Forgot Password ?</p></Link>
       </div>
-      <button className='bg-red-600 text-white uppercase p-2 font-medium'>Login</button>
+      <button className='bg-red-600 text-white uppercase p-2 font-medium' onClick={handleLoginEmail}>Login</button>
       <div className='flex flex-col justify-center text-white mt-4 gap-2'>
         <p className='text-sm mx-auto'>Log In Via</p>
         <div className='flex justify-between gap-3 mb-4'>

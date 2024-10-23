@@ -347,6 +347,8 @@ const userlogout = async (req, res) => {
 
 const sendotp = async (req, res) => {
   const { email } = req.body;
+  console.log(email);
+  
   try {
     const user = await User.findOne({ email });
     if (!user) {

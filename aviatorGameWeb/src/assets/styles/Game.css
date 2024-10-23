@@ -1,0 +1,112 @@
+.game-container {
+    /* display: flex; */
+    /* justify-content: center; */
+    /* align-items: center; */
+    /* height: 100vh; */
+    /* width: 100vw; */
+    /* width: 70%; */
+    /* background-color: #1e1e2f; */
+    /* border-width: 1px; */
+    
+    
+  }
+  
+  .game-screen {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    /* background-color: #2d2d44; */
+    /* padding: 20px; */
+    border-radius: 10px;
+    /* width: 80%; */
+    max-width: 800px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+    padding-top: 0px;
+  }
+  
+  /* .history {
+    background-color: #3d3d5c;
+    padding: 15px;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 18px;
+    text-align: center;
+    min-height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  } */
+  
+  .game {
+    /* width: 100%; */
+    position: relative;
+    background-color: black;
+    padding: 15px;
+    border-width: 1px;
+    border-color: #3d3d5c;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 24px;
+    text-align: center;
+    min-height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 0px;
+  }
+  
+  .plane {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 120px;
+    height: auto;
+    transition: transform 100ms linear;
+  }
+  
+  .bet {
+    background-color: #3d3d5c;
+    /* padding: 15px; */
+    border-radius: 8px;
+    /* display: flex; */
+    /* gap: 10px; */
+    width: 100%;
+  }
+  
+  .loading {
+    width: 120px;
+    display: block;
+    animation: rotateLoader 1s linear infinite;
+    position: absolute;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  @keyframes rotateBackground {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* Class for the rotating SVG background */
+  .rotating-background {
+    /* background-position: left bottom;  
+    background-repeat: no-repeat;
+    background-size: auto; */
+    animation: rotateBackground 10s linear infinite;
+  }
+  
+  @keyframes rotateLoader {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  

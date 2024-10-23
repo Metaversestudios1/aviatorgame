@@ -11,9 +11,17 @@ import quick from './../../assets/images/home/quick-share-seeklogo.png'
 import whatsapp from './../../assets/images/home/WhatsApp_icon.png'
 import facebook from './../../assets/images/home/facebook-logo-2428.png'
 import insta from './../../assets/images/home/—Pngtree—instagram icon_8704817.png'
+import Cookies from 'js-cookie';
 
 import { FaShareNodes } from 'react-icons/fa6'
-export default function Header() {
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+export default function Header({ hideFooter, setActiveModal }) {
+  const openModal = (modalType) => {
+    setActiveModal(modalType);
+    hideFooter(true); // Hide footer when modal opens
+  };
+  const navigate =useNavigate()
     const [toggle, setToggle] = useState({
         sound: false,
         share: false,
@@ -25,12 +33,19 @@ export default function Header() {
             [type]: !prevState[type]
         }));
     };
+    // handle logout
+    const handleLogout = () => {
+      Cookies.remove('user');
+      Cookies.remove('token');
+      navigate('/')
+      toast.success('Logout successful!')
+    }
 
   return (
     <div className="bg-[rgba(0,0,0,0.6)] h-20 flex items-center md:justify-between">
       <div className="flex w-1/2 md:w-1/3 justify-around items-center">
         <img src={logo} alt="logo" className="w-[13vw] h-8" />
-        <span className="flex">
+        <span className="flex cursor-pointer" onClick={() => openModal('profile')}>
           <img
             src="https://thumbs.dreamstime.com/b/d-icon-avatar-cartoon-character-man-businessman-business-suit-looking-camera-isolated-transparent-png-background-277029050.jpg"
             alt="..."
@@ -120,7 +135,7 @@ export default function Header() {
             </div>
           )}
         </span>
-        <span className="flex flex-col justify-center items-center text-white cursor-pointer">
+        <span className="flex flex-col justify-center items-center text-white cursor-pointer" onClick={handleLogout}>
           <img src={exit} alt="settings" className="w-6 md:w-11" />
           <p className="font-semibold">Exit Game</p>
         </span>

@@ -7,6 +7,9 @@ import Register from './pages/Register';
 import ResetPassword from './pages/resetPassword';
 import ResetOtpScreen from './pages/ResetOtpScreen';
 import GameScreen from './pages/GameScreen';
+import Aviator from './pages/Aviator';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
@@ -18,6 +21,7 @@ function App() {
 
   return (
     <Router>
+      <ToastContainer />
       {showWelcome ? (
         <Welcome onWelcomeEnd={handleWelcomeEnd} />
       ) : (
@@ -28,6 +32,7 @@ function App() {
           <Route path="/password-reset" element={<ResetPassword />} />
           <Route path="/password-reset-otp" element={<ResetOtpScreen />} />
           <Route path="/aviator-game" element={<GameScreen />} />
+          <Route path="/aviator" element={<Aviator />} />
         </Routes>
       )}
     </Router>

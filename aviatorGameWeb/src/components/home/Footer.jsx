@@ -38,9 +38,9 @@ export default function Footer({ hideFooter, setActiveModal }) {
             <p className='font-semibold text-xs md:text-md'>Game History</p>
             </span>
         </div>
-        <button className='bg-[url("./assets/images/home/play-button.png")] bg-contain bg-no-repeat w-1/6 md:w-1/5 h-20 -mt-8 md:-mt-20' onClick={()=>navigate('/aviator-game')}></button>
+        <button className='bg-[url("./assets/images/home/play-button.png")] bg-contain bg-no-repeat w-1/6 md:w-1/5 h-20 -mt-8 md:-mt-20' onClick={()=>navigate('/aviator')}></button>
         <div className='flex w-1/2 md:w-1/3 justify-around items-center'>
-            <span className='flex flex-col justify-center items-center text-white cursor-pointer'>
+            <span className='flex flex-col justify-center items-center text-white cursor-pointer' onClick={() => openModal('reward')}>
             <img src={reward} alt="coin" className='w-6 md:w-11'/>
             <p className='font-semibold text-xs md:text-md'>Daily Rewards</p>
             </span>

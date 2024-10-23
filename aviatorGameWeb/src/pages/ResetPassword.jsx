@@ -5,9 +5,34 @@ import { Link, useNavigate } from 'react-router-dom'
 import { FaArrowLeft } from 'react-icons/fa6'
 import OtpInput from '../components/resetPassword/OtpInput'
 import ResetBox from '../components/resetPassword/ResetBox'
+import { forgetPasswordSendOtp } from '../services/api'
+import { toast } from 'react-toastify'
 
 export default function ResetPassword() {
    const navigate = useNavigate()
+   const [email,setEmail] = useState('')
+   const [loading,setLoading] = useState(false)
+
+   const handleResetOtp = async()=>{
+    if(!email){
+      toast.error('Enter user id');
+      return ;
+    }
+    setLoading(true)
+    try {
+      const response = await forgetPasswordSendOtp(email)
+      console.log(response);
+      if(response.status===200){
+        toast.success(response.data?.message)
+        navigate('/password-reset-otp',{ state: { email } })
+      }
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+      setLoading(false)
+    }
+    setLoading(false)
+   }
   return (
     <div className=' bg-[url("./assets/images/forgot_password/bg.png")] bg-cover bg-no-repeat h-screen w-screen flex justify-center items-center'>
       {/* <img src={BG} alt="background image" className='h-screen w-screen'/> */}
@@ -23,12 +48,14 @@ export default function ResetPassword() {
             <input
               type="email"
               placeholder="Enter your Email Id"
-              className="bg-transparent outline-none flex-grow text-white"
+              className="bg-transparent outline-none flex-grow text-white w-full"
+              value={email}
+              onChange={(e)=>setEmail(e.target.value)}
             />
           </div>
         </div>
-        <button className="bg-red-600 hover:bg-red-500 text-white p-3 font-bold my-2 rounded-lg w-full" onClick={()=>navigate('/password-reset-otp')}>
-          Reset Password
+        <button className="bg-red-600 hover:bg-red-500 text-white p-3 font-bold my-2 rounded-lg w-full" onClick={handleResetOtp} disabled={loading}>
+          {loading? 'wait....':'Reset Password'}
         </button>
         <Link
           to={"/"}

@@ -1,15 +1,24 @@
 import React, { useState } from 'react'
 import { IoMdEyeOff } from 'react-icons/io'
 import { IoEye } from 'react-icons/io5'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import currencyOptions from './../../services/currencies.json'
 import Select from 'react-select'; 
 import './../../assets/styles/Register.css'
+import { confirmSignUpEmailOtp, createUser, sendEmailSignUpOtp } from '../../services/api'
+import { toast } from 'react-toastify'
 
 export default function Email() {
-  const [email, setEmail] = useState()
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('')
+  const [confirmCode,setConfirmCode] = useState('')
   const [selectedCurrency, setSelectedCurrency] = useState(null)
   const [passwordVisible, setPasswordVisible] = useState(false)
+  const [loading,setLoading] = useState(false)
+  const [confirmed,setConfirmed] =useState(false)
+  const [promoCode, setPromoCode] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible)
@@ -19,6 +28,15 @@ export default function Email() {
     setSelectedCurrency(option)
   }
 
+  const handlePasswordChange = (e) => {
+    const value = e.target.value;
+    if (value.length > 4) {
+      setPasswordError('Password cannot exceed 4 characters');
+    } else {
+      setPassword(value);
+      setPasswordError(''); // Clear error if valid
+    }
+  };
 
   // Custom styles for the Select component
   const customStyles = {
@@ -49,6 +67,148 @@ export default function Email() {
     }),
   };
 
+  // Send Otp
+  const sendOtp = async () => {
+    setLoading(true)
+    try {
+      const response = await sendEmailSignUpOtp(email);
+      console.log(response);
+      
+      if (response.status === 200) {
+        setLoading(false);
+        toast.success("Check email for confirmation code", {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }else{
+        toast.error(response.data.message, {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          className: "custom-toast-error", // Apply custom error class
+        });
+      }
+      setLoading(false)
+    } catch (error) {
+      console.error("Error during send code", error);
+      toast.error(error.response.data.message, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        className: "custom-toast-error", // Apply custom error class
+      });
+      setLoading(false)
+    }
+  }
+  // confirm code
+  const handleConfirmCode = async () => {
+    setConfirmed(true)
+    try {
+      const response = await confirmSignUpEmailOtp(email,confirmCode);
+      console.log(response);
+      if(response.status ===200){
+        toast.success(response.data?.message, {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data?.message, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setConfirmed(false)
+      
+    }
+  }
+  const registerUser = async () => {
+    if (password.length > 4) {
+      setPasswordError('Password cannot exceed 4 characters');
+      return; // Prevent submission if password is too long
+    }
+    setLoading(true);
+    try {
+      const userData = {
+        email,
+        password,
+        currency: selectedCurrency?.value, // Assuming currency options contain value and label
+        promoCode,
+      };
+  
+      // Make API call to register user
+      const response = await createUser(userData); 
+  
+      if (response.status === 200) {
+        toast.success("User registered successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        navigate('/')
+      } else {
+        toast.error(response.data?.message, {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Error registering user", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-col md:flex-row md:justify-between gap-4 md:items-center">
@@ -59,10 +219,12 @@ export default function Email() {
                 <input
               type='email'
               placeholder='Enter your Email Id'
-              className='bg-transparent outline-none flex-grow text-white p-2'
+              className='bg-transparent outline-none flex-grow text-white p-2 w-full'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
-              <button className="bg-sky-600 text-sm text-white px-4 hover:bg-sky-300 hover:text-sky-600">
-                Send Mail
+              <button className="bg-sky-600 text-sm text-white px-4 hover:bg-sky-300 hover:text-sky-600" onClick={sendOtp} disabled={loading}>
+                {loading ? 'Sending Mail':'Send Mail'}
               </button>
             </div>
           </div>
@@ -71,9 +233,11 @@ export default function Email() {
               type="text"
               placeholder="Confirmation Code"
               className="bg-transparent text-white p-2 outline-none"
+              value={confirmCode}
+              onChange={(e)=>setConfirmCode(e.target.value)}
             />
-            <button className="bg-sky-300 text-sm text-sky-600 px-4 hover:bg-sky-600 hover:text-white">
-              Confirm
+            <button className={`${confirmed ?'bg-green-300':'bg-sky-300'} text-sm text-sky-600 px-4 hover:bg-sky-600 hover:text-white`} onClick={handleConfirmCode} disabled={confirmed}>
+              {confirmed ? 'Confirmed':'Confirm'}
             </button>
           </div>
         </div>
@@ -89,7 +253,8 @@ export default function Email() {
           />
         </div>
         <div className="border-2 border-red-600 mt-4 rounded-sm">
-          <input type="text" placeholder='Promo Code (if you have one)' className="w-full bg-transparent text-white p-2 outline-none"/>
+          <input type="text" placeholder='Promo Code (if you have one)' className="w-full bg-transparent text-white p-2 outline-none" value={promoCode}
+            onChange={(e) => setPromoCode(e.target.value)}/>
         </div>
        </div>
       </div>
@@ -98,12 +263,15 @@ export default function Email() {
           type={passwordVisible ? 'text' : 'password'}
           placeholder='Password*'
           className='bg-transparent outline-none flex-grow text-white'
+          value={password}
+          onChange={handlePasswordChange}
         />
         <button type='button' onClick={togglePasswordVisibility} className='text-white ml-2'>
           {passwordVisible ? <IoEye className='text-sky-500'/> : <IoMdEyeOff className='text-sky-500'/>}
         </button>
       </div>
-      <button className="bg-red-600 text-white uppercase p-2 font-medium">
+      {passwordError && <p className="text-red-500">{passwordError}</p>}
+      <button className="bg-red-600 text-white uppercase p-2 font-medium" onClick={registerUser}>
         Register
       </button>
       
